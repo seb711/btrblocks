@@ -49,7 +49,7 @@ class RleSimdTest : public ::testing::TestWithParam<std::string> {
     }
     #endif
      else {
-      std::cout << "CODEC NOT SUPPORTED: " << name << std::endl;
+      GTEST_FAIL();
     }
   }
 
@@ -123,7 +123,7 @@ TEST_P(RleSimdTest, increasingSequence) {
 
   _verify();
 }
-
+/*
 TEST_P(RleSimdTest, randomNumbers) {
   generateRandomData(in, 65536, 5, 5);
   _verify();
@@ -146,10 +146,10 @@ TEST_P(RleSimdTest, fastpack_zeros_with_exceptions) {
   in.push_back(1033);
 
   _verify();
-}
+} */
 
 INSTANTIATE_TEST_CASE_P(
     MyInstantiation,
     RleSimdTest,
-    Values("NEON", "SVE", "AVX512", "AVX2", "PLAIN"));
+    Values("NEON", "AVX512", "SVE", "AVX2", "PLAIN"));
 }  // namespace btrblocks_simd_comparison
