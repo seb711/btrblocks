@@ -27,7 +27,7 @@ class RLE {
     RLEStructure<NumberType>* col_struct = reinterpret_cast<RLEStructure<NumberType>*>(dest);
     // -------------------------------------------------------------------------------------
     std::vector<NumberType> rle_values;
-    std::vector<btrblocks::INTEGER> rle_count;
+    std::vector<INTEGER> rle_count;
     // -------------------------------------------------------------------------------------
     // RLE encoding
     NumberType last_item = src[0];
