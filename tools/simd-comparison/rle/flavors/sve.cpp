@@ -49,7 +49,7 @@ inline void SveRLE<INTEGER>::decompress(
     while (write_ptr < target_ptr) {
       // store is performed in a single cycle
       // TODO: check if tp can be masked
-      svst1_s32(tp, reinterpret_cast<int32_t*>(write_ptr), vec);
+      svst1_s32(tp, reinterpret_cast<INTEGER*>(write_ptr), vec);
       write_ptr += w;
     }
     write_ptr = target_ptr;

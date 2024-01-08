@@ -45,7 +45,7 @@ inline void NeonRLE<INTEGER>::decompress(
     int32x4_t vec = vdupq_n_s32(values[run_i]);
     while (write_ptr < target_ptr) {
       // store is performed in a single cycle
-      vst1q_s32(reinterpret_cast<int32x4_t*>(write_ptr), vec);
+      vst1q_s32(reinterpret_cast<INTEGER*>(write_ptr), vec);
       write_ptr += 8;
     }
     write_ptr = target_ptr;
