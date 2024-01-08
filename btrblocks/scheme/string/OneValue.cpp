@@ -10,6 +10,7 @@
 // -------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------
 namespace btrblocks::legacy::strings {
+
 // -------------------------------------------------------------------------------------
 double OneValue::expectedCompressionRatio(StringStats& stats, u8 allowed_cascading_level) {
   if (stats.distinct_values.size() <= 1) {
@@ -79,7 +80,7 @@ void OneValue::decompress(u8* dest,
     /*
      * TODO the code here needs more testing and investigation.
      */
-    Roaring& r = nullmap->roaring();
+    roaring::Roaring& r = nullmap->roaring();
     if (nullmap->type() == BitmapType::REGULAR) {
       std::tuple<StringArrayViewer::Slot*, u32, u32> param = {dest_slots, write_offset,
                                                               col_struct.length};

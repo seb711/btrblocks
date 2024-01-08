@@ -5,8 +5,9 @@
 #include <tbb/parallel_for_each.h>
 // -------------------------------------------------------------------------------------
 #include "gflags/gflags.h"
+#include "tbb/global_control.h"
 #include "tbb/parallel_for.h"
-#include "tbb/task_scheduler_init.h"
+// #include "tbb/task_scheduler_init.h"
 // -------------------------------------------------------------------------------------
 #include "common/PerfEvent.hpp"
 #include "common/Utils.hpp"
@@ -107,8 +108,9 @@ int main(int argc, char **argv) {
         threads = -1;
     } else {
         threads = FLAGS_threads;
+      tbb::global_control global_limit(tbb::global_control::max_allowed_parallelism, threads);
     }
-    tbb::task_scheduler_init init(threads);
+    // tbb::task_scheduler_init init(threads);
 
     // Read the metadata
     std::vector<char> raw_file_metadata;
@@ -229,12 +231,14 @@ int main(int argc, char **argv) {
         double s = average_runtime / (1000.0 * 1000.0);
         double mbs = mb / s;
 
-        std::cout << "Total:"
+        std::cout << std::to_string(total_runtime) << " " << total_compressed_size << '\n';
+
+        /* std::cout << "Total:"
                   << " " << total_compressed_size << " Bytes"
                   << " " << total_size << " Bytes"
                   << " " << average_runtime << " us"
                   << " " << mbs << " MB/s"
-                  << std::endl;
+                  << std::endl; */
     }
 }
 // -------------------------------------------------------------------------------------

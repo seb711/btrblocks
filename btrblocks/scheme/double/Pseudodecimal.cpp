@@ -71,7 +71,7 @@ u32 Decimal::compress(const DOUBLE* src,
   u32 exception_count = 0;
   u8 run_count = 0;
 
-  Roaring exceptions_bitmap;
+  roaring::Roaring exceptions_bitmap;
   const u32 num_blocks = (stats.tuple_count + (block_size - 1)) / block_size;
   for (u32 block_i = 0; block_i < num_blocks; block_i++) {
     bool block_has_exception = false;
@@ -361,7 +361,7 @@ void Decimal::decompress(DOUBLE* dest, BitmapWrapper*, const u8* src, u32 tuple_
   thread_local std::vector<std::vector<DOUBLE>> patches_v;
   auto patches_ptr = get_level_data(
       patches_v, tuple_count - col_struct.converted_count + SIMD_EXTRA_ELEMENTS(DOUBLE), level);
-  Roaring exceptions_bitmap = Roaring::read(
+  roaring::Roaring exceptions_bitmap = roaring::Roaring::read(
       reinterpret_cast<const char*>(col_struct.data + col_struct.exceptions_map_offset), false);
 
   if (col_struct.converted_count > 0) {
