@@ -35,7 +35,7 @@ class RleSimdTest : public ::testing::TestWithParam<std::string> {
     #endif
     #if defined(__GNUC__) and defined(__AVX512VL__)
     else if (name == "AVX512") {
-      codec = std::make_unique<Avx512<INTEGER>>();
+      codec = std::make_unique<Avx512RLE<INTEGER>>();
     }
     #endif
     #if defined(__GNUC__) and defined(__ARM_NEON)
