@@ -18,7 +18,7 @@ BitmapWrapper::BitmapWrapper(const u8* src,
     return;
   }
 
-  this->m_roaring = Roaring::Roaring::read(reinterpret_cast<const char*>(src), false);
+  this->m_roaring = Roaring::read(reinterpret_cast<const char*>(src), false);
   this->m_cardinality = this->m_roaring.cardinality();
   if (type == BitmapType::FLIPPED) {
     this->m_cardinality = this->m_tuple_count - this->m_cardinality;
@@ -145,7 +145,7 @@ std::pair<u32, BitmapType> RoaringBitmap::compress(const BITMAP* bitmap,
   }
 
   // Write the actual bitmap
-  Roaring::Roaring r;
+  Roaring r;
   for (u32 row_i = 0; row_i < tuple_count; row_i++) {
     if (bitmap[row_i] == check_value) {
       r.add(row_i);

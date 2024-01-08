@@ -11,7 +11,7 @@ class BitmapWrapper {
  private:
   u32 m_tuple_count;
   u32 m_cardinality;
-  roaring::Roaring m_roaring;
+  Roaring m_roaring;
   boost::dynamic_bitset<>* m_bitset = nullptr;
   bool m_bitset_initialized = false;
   BitmapType m_type;
@@ -29,7 +29,7 @@ class BitmapWrapper {
   [[nodiscard]] inline bool test(u32 idx) { return this->get_bitset()->test(idx); }
   [[nodiscard]] inline u32 cardinality() const { return this->m_cardinality; };
   [[nodiscard]] inline BitmapType type() const { return this->m_type; };
-  [[nodiscard]] inline roaring::Roaring& roaring() { return this->m_roaring; };
+  [[nodiscard]] inline Roaring& roaring() { return this->m_roaring; };
 };
 class RoaringBitmap {
  public:

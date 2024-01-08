@@ -80,7 +80,7 @@ void OneValue::decompress(u8* dest,
     /*
      * TODO the code here needs more testing and investigation.
      */
-    roaring::Roaring& r = nullmap->roaring();
+    Roaring& r = nullmap->roaring();
     if (nullmap->type() == BitmapType::REGULAR) {
       std::tuple<StringArrayViewer::Slot*, u32, u32> param = {dest_slots, write_offset,
                                                               col_struct.length};
