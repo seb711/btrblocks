@@ -10,7 +10,7 @@ ExternalProject_Add(
     croaring_src
     PREFIX "vendor/croaring"
     GIT_REPOSITORY "https://github.com/RoaringBitmap/CRoaring.git"
-    GIT_TAG v2.0.4
+    GIT_TAG b88b002407b42fafaea23ea5009a54a24d1c1ed4
     TIMEOUT 10
     CMAKE_ARGS
         -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/vendor/croaring
