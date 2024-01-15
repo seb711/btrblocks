@@ -99,7 +99,7 @@ class RleSimdTest : public ::testing::TestWithParam<std::string> {
   }
 
   template <typename T>
-  btrblocks::Vector<T> generateRandomData(std::vector<T>& v,
+  void generateRandomData(std::vector<T>& v,
                                           size_t size,
                                           size_t unique,
                                           size_t runlength,
@@ -123,11 +123,12 @@ TEST_P(RleSimdTest, increasingSequence) {
 
   _verify();
 }
-/*
+
 TEST_P(RleSimdTest, randomNumbers) {
-  generateRandomData(in, 65536, 5, 5);
+  generateRandomData(in, 2 << 16, 2 << 6, 5);
   _verify();
 }
+
 
 TEST_P(RleSimdTest, fastpack_zeors) {
   in.clear();
@@ -146,10 +147,25 @@ TEST_P(RleSimdTest, fastpack_zeros_with_exceptions) {
   in.push_back(1033);
 
   _verify();
-} */
+}
 
 INSTANTIATE_TEST_CASE_P(
     MyInstantiation,
     RleSimdTest,
-    Values("NEON", "AVX512", "SVE", "AVX2", "PLAIN"));
+    Values(
+        "PLAIN"
+    #if defined(__GNUC__) and defined(__AVX2__)
+          , "AVX2"
+    #endif
+    #if defined(__GNUC__) and defined(__AVX512VL__)
+          , "AVX512"
+    #endif
+    #if defined(__GNUC__) and defined(__ARM_NEON)
+          , "NEON"
+    #endif
+    #if defined(__GNUC__) and defined(__ARM_FEATURE_SVE)
+          , "SVE"
+    #endif
+        )
+    );
 }  // namespace btrblocks_simd_comparison
