@@ -1,7 +1,10 @@
 #pragma once
 // -------------------------------------------------------------------------------------
-#include "scheme/CompressionScheme.hpp"
+
 // -------------------------------------------------------------------------------------
+#include "stats/NumberStats.hpp"
+#include <cstring>
+
 namespace btrblocks_simd_comparison {
 using SInteger32Stats = btrblocks::NumberStats<btrblocks::s32>;
 using INTEGER = btrblocks::s32;  // we use FOR always at the beginning so negative integers
@@ -15,7 +18,7 @@ struct RLEStructure {
   NumberType* data;
 };
 
-template <class NumberType>
+template <class NumberType, typename DecompressFn>
 class RLE {
   // -------------------------------------------------------------------------------------
  public:
@@ -62,14 +65,16 @@ class RLE {
 
     return write_ptr - reinterpret_cast<btrblocks::u8*>(dest);;
   };
-  virtual void decompress(NumberType* dest,
+
+  DecompressFn decompress{};
+
+  /*
+  void decompress(NumberType* dest,
                   BitmapWrapper* nullmap,
                   const RLEStructure<NumberType>* src,
                   btrblocks::u32 tuple_count,
-                  btrblocks::u32 level) {
-    throw Generic_Exception("Unsupported templated specialization");
-  };
+                  btrblocks::u32 level) = DecompressFn; */
 };
 // -------------------------------------------------------------------------------------
-}  // namespace btrblocks::integers
+}  // namespace btrblocks_simd_comparison
 // -------------------------------------------------------------------------------------

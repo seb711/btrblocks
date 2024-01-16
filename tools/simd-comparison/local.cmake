@@ -10,7 +10,7 @@ set(BTR_SIMD_COMPARISON_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 add_executable(btrrlesimd
         ${BTR_SIMD_COMPARISON_DIR}/test_driver.cpp
-        ${BTR_SIMD_COMPARISON_DIR}/rle/test.cpp)
+        ${BTR_SIMD_COMPARISON_DIR}/rle/test_typed.cpp)
 target_link_libraries(btrrlesimd btrblocks gtest gmock Threads::Threads)
 enable_testing()
 add_test("btrsimdtesting" btrrlesimd)
