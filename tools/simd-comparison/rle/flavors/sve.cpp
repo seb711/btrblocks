@@ -16,6 +16,7 @@ struct sve_rle_decompression {
                       btrblocks::u32 level) {}
 };
 
+#if defined(__ARM_FEATURE_SVE)
 template <>
 struct sve_rle_decompression<INTEGER> {
   uint64_t operator()(INTEGER* dest,
@@ -55,6 +56,7 @@ struct sve_rle_decompression<INTEGER> {
     }
   }
 };
+#endif
 // -------------------------------------------------------------------------------------
 }  // namespace btrblocks_simd_comparison
 // -------------------------------------------------------------------------------------

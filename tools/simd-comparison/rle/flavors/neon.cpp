@@ -16,6 +16,7 @@ struct neon_rle_decompression {
                       btrblocks::u32 level) {}
 };
 
+#if defined(__ARM_NEON)
 template <>
 struct neon_rle_decompression<INTEGER> {
   uint64_t operator()(INTEGER* dest,
@@ -51,6 +52,7 @@ struct neon_rle_decompression<INTEGER> {
     }
   }
 };
+#endif
 // -------------------------------------------------------------------------------------
 }  // namespace btrblocks_simd_comparison
 // -------------------------------------------------------------------------------------

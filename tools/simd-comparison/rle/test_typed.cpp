@@ -5,21 +5,10 @@
 #include "gtest/gtest.h"
 
 #include "./flavors/plain.cpp"
-#if defined(__GNUC__) and defined(__AVX2__)
 #include "./flavors/avx2.cpp"
-#endif
-#if defined(__GNUC__) and defined(__AVX512VL__)
 #include "./flavors/avx512.cpp"
-#endif
-#if defined(__GNUC__) and defined(__ARM_NEON)
 #include "./flavors/neon.cpp"
-#endif
-#if defined(__GNUC__) and defined(__ARM_FEATURE_SVE)
 #include "./flavors/sve.cpp"
-#endif
-
-#include "extern/RoaringBitmap.hpp"
-#include "flavors/RLE.hpp"
 
 namespace btrblocks_simd_comparison {
 

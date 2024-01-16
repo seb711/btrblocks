@@ -16,6 +16,7 @@ struct avx512_rle_decompression {
                       btrblocks::u32 level) {}
 };
 
+#if defined(__AVX512VL__)
 template <>
 struct avx512_rle_decompression<INTEGER> {
   uint64_t operator()(INTEGER* dest,
@@ -66,6 +67,7 @@ struct avx512_rle_decompression<INTEGER> {
     }
   }
 };
+#endif
 // -------------------------------------------------------------------------------------
 }  // namespace btrblocks_simd_comparison
    // -------------------------------------------------------------------------------------
