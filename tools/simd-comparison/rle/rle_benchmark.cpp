@@ -4,6 +4,7 @@
 #include "flavors/RLE.hpp"
 
 #include "./flavors/avx2.cpp"
+#include "./flavors/compintrin.cpp"
 #include "./flavors/avx512.cpp"
 #include "./flavors/neon.cpp"
 #include "./flavors/plain.cpp"
@@ -100,17 +101,20 @@ int main(int argc, char **argv) {
   generate_dataset(dataset, entries, 64);
 
   RleBench<naive_rle_decompression<INTEGER>>("naive").measure(dataset, 5);
-
-#if defined(__GNUC__) and defined(__AVX2__)
+#if defined(__GNUC__)
+  RleBench<compintrin_rle_decompression<INTEGER>>("comp_intrin").measure(dataset, 5);
+#if defined(__AVX2__)
   RleBench<avx2_rle_decompression<INTEGER>>("avx2").measure(dataset, 5);
 #endif
-#if defined(__GNUC__) and defined(__AVX512VL__)
+#if defined(__AVX512VL__)
   RleBench<avx512_rle_decompression<INTEGER>>("avx512").measure(dataset, 5);
 #endif
-#if defined(__GNUC__) and defined(__ARM_NEON)
+#if defined(__ARM_NEON)
   RleBench<neon_rle_decompression<INTEGER>>("neon").measure(dataset, 5);
 #endif
-#if defined(__GNUC__) and defined(__ARM_FEATURE_SVE)
+#if defined(__ARM_FEATURE_SVE)
   RleBench<sve_rle_decompression<INTEGER>>("sve").measure(dataset, 5);
 #endif
+#endif
+
 }

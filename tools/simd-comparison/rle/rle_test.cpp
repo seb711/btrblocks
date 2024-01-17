@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "./flavors/plain.cpp"
+#include "./flavors/compintrin.cpp"
 #include "./flavors/avx2.cpp"
 #include "./flavors/avx512.cpp"
 #include "./flavors/neon.cpp"
@@ -109,18 +110,20 @@ REGISTER_TYPED_TEST_CASE_P(RleTest,
                             Basic, Random, FastPackZeros, FastPackZerosException);
 
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_NAIVE, RleTest, naive_rle_decompression<INTEGER>);
-
-#if defined(__GNUC__) and defined(__AVX2__)
+#if defined(__GNUC__)
+INSTANTIATE_TYPED_TEST_CASE_P(RLE_COMP, RleTest, compintrin_rle_decompression<INTEGER>);
+#if defined(__AVX2__)
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_AVX2, RleTest, avx2_rle_decompression<INTEGER>);
 #endif
-#if defined(__GNUC__) and defined(__AVX512VL__)
+#if defined(__AVX512VL__)
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_AVX512, RleTest, avx512_rle_decompression<INTEGER>);
 #endif
-#if defined(__GNUC__) and defined(__ARM_NEON)
+#if defined(__ARM_NEON)
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_NEON, RleTest, neon_rle_decompression<INTEGER>);
 #endif
-#if defined(__GNUC__) and defined(__ARM_FEATURE_SVE)
+#if defined(__ARM_FEATURE_SVE)
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_SVE, RleTest, sve_rle_decompression<INTEGER>);
+#endif
 #endif
 
 // -------------------------------------------------------------------------------------
