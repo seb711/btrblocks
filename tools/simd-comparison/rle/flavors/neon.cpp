@@ -46,7 +46,7 @@ struct neon_rle_decompression<INTEGER> {
       while (write_ptr < target_ptr) {
         // store is performed in a single cycle
         vst1q_s32(reinterpret_cast<INTEGER*>(write_ptr), vec);
-        write_ptr += 8;
+        write_ptr += 4;
       }
       write_ptr = target_ptr;
     }
