@@ -27,7 +27,7 @@ class RLE {
                RLEStructure<NumberType>* dest,
                btrblocks::u32 tuple_count,
                btrblocks::u8 allowed_cascading_level) {
-    RLEStructure<NumberType>* col_struct = reinterpret_cast<RLEStructure<NumberType>*>(dest);
+    auto* col_struct = reinterpret_cast<RLEStructure<NumberType>*>(dest);
     // -------------------------------------------------------------------------------------
     std::vector<NumberType> rle_values;
     std::vector<INTEGER> rle_count;

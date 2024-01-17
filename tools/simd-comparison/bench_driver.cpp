@@ -2,10 +2,9 @@
 // BtrBlocks
 // ---------------------------------------------------------------------------
 #include "benchmark/benchmark.h"
-#include "scheme/SchemePool.hpp"
-#include "bench-cases/regression_benchmark.cpp"
+#include <iostream>
+
 // ---------------------------------------------------------------------------
-using namespace btrblocks;
 // ---------------------------------------------------------------------------
 int main(int argc, char** argv) {
 #ifdef BTR_USE_SIMD
@@ -15,5 +14,7 @@ int main(int argc, char** argv) {
 #endif
   benchmark::Initialize(&argc, argv);
   benchmark::RunSpecifiedBenchmarks();
+  benchmark::Shutdown();
+  return 0;
 }
 // ---------------------------------------------------------------------------

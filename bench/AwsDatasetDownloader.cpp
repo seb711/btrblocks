@@ -32,8 +32,7 @@ vector<string> StringBenchmarkDatasets{
     "binary/Arade/1/Arade_1/1_F1.string", "binary/Arade/1/Arade_1/2_F2.string",
     "binary/Arade/1/Arade_1/6_F6.string", "binary/Arade/1/Arade_1/7_F7.string"};
 
-vector<vector<string>> Datasets = {IntegerBenchmarkDatasets, DoubleBenchmarkDatasets,
-                                   StringBenchmarkDatasets};
+vector<vector<string>> Datasets = {IntegerBenchmarkDatasets};
 
 void DownloadBenchmarkDataset(const Aws::String& bucket_name,
                               const Aws::String& objectKey,

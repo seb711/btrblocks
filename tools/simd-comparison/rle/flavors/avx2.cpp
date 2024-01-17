@@ -28,11 +28,7 @@ struct avx2_rle_decompression<INTEGER> {
 
     const auto* col_struct = reinterpret_cast<const RLEStructure<INTEGER>*>(src);
 
-    /// THINK ABOUT A BETTER SOLUTION TO DO THAT (MAYBE KIND OF A BUFFER THAT'S USED BY RLE)
-    /// TODO: THIS IS HIGHLY ILLEGAL BECAUSE THE MEMORY IS NOT DEALLOCATED
     auto values = col_struct->data;
-
-    /// TODO: THIS ALSO
     auto counts = (col_struct->data + col_struct->runs_count);
 
     // -------------------------------------------------------------------------------------
