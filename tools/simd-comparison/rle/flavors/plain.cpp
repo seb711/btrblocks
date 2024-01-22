@@ -12,31 +12,31 @@ struct naive_rle_decompression {
                       BitmapWrapper* nullmap,
                       const RLEStructure<T>* src,
                       btrblocks::u32 tuple_count,
-                      btrblocks::u32 level) {}
+                      btrblocks::u32 level) {
+    throw Generic_Exception("Not implemented");
+  }
 };
 
 template <>
 struct naive_rle_decompression<INTEGER> {
-  uint64_t operator()(INTEGER* dest,
+  __attribute__((optimize("no-tree-vectorize")))
+  void operator()(INTEGER* dest,
                       BitmapWrapper* nullmap,
                       const RLEStructure<INTEGER>* src,
                       btrblocks::u32 tuple_count,
                       btrblocks::u32 level) {
     static_assert(sizeof(*dest) == 4);
 
-    const auto* col_struct = reinterpret_cast<const RLEStructure<INTEGER>*>(src);
-
-    auto values = col_struct->data;
-    auto counts = (col_struct->data + col_struct->runs_count);
+    auto values = src->data;
+    auto counts = (src->data + src->runs_count);
     // -------------------------------------------------------------------------------------
-    auto write_ptr = dest;
 
     /// THIS IS THE INTERESTING PART HERE
-    for (btrblocks::u32 run_i = 0; run_i < col_struct->runs_count; run_i++) {
-      auto val = values[run_i];
-      auto target_ptr = write_ptr + counts[run_i];
-      while (write_ptr != target_ptr) {
-        *write_ptr++ = val;
+    for (btrblocks::u32 run_i = 0; run_i < (src->runs_count); run_i++) {
+      INTEGER val = values[run_i];
+      auto target_ptr = dest + counts[run_i];
+      while (dest != target_ptr) {
+        *(dest++) = val;
       }
     }
   }

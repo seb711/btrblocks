@@ -7,13 +7,15 @@
 namespace btrblocks_simd_comparison {
 // -------------------------------------------------------------------------------------
 /// AVX2 IMPLEMENTATION
-template <class T>
+template <class T, size_t VECTORSIZE>
 struct compintrin_rle_decompression {
   uint64_t operator()(T* dest,
                       BitmapWrapper* nullmap,
                       const RLEStructure<T>* src,
                       btrblocks::u32 tuple_count,
-                      btrblocks::u32 level) {}
+                      btrblocks::u32 level) {
+    throw Generic_Exception("Not implemented");
+  }
 };
 
 #if defined(__GNUC__)
@@ -35,11 +37,19 @@ inline void store_unaligned(void* ptr, VectorT value) {
   *reinterpret_cast<UnalignedVector*>(ptr) = value;
 }
 
-template <>
-struct compintrin_rle_decompression<INTEGER> {
-  using int32x4 = GccVec<int32_t, 16>::T;
+template <typename VectorT, typename MaskT>
+inline VectorT shuffle_vector(VectorT vec, MaskT mask) {
+  // The vector element size must be equal, so we convert the mask to VecT. This is a no-op if they are the same.
+  // Note that this conversion can have a runtime cost, so consider using the correct type.
+  // See: https://godbolt.org/z/3xdahP67o
+  return __builtin_shuffle(vec, __builtin_convertvector(mask, VectorT));
+}
 
-  uint64_t operator()(INTEGER* dest,
+template <size_t VECTORSIZE>
+struct compintrin_rle_decompression<INTEGER, VECTORSIZE> {
+  using int32xVecSize __attribute__((vector_size(VECTORSIZE * sizeof(INTEGER)), aligned(VECTORSIZE * sizeof(INTEGER)))) = INTEGER;
+
+  void operator()(INTEGER* dest,
                       BitmapWrapper* nullmap,
                       const RLEStructure<INTEGER>* src,
                       btrblocks::u32 tuple_count,
@@ -54,23 +64,23 @@ struct compintrin_rle_decompression<INTEGER> {
     // -------------------------------------------------------------------------------------
     auto write_ptr = dest;
 
-    auto upper_limit = dest + tuple_count;
-
     /// THIS IS THE INTERESTING PART HERE
     for (btrblocks::u32 run_i = 0; run_i < col_struct->runs_count; run_i++) {
       auto target_ptr = write_ptr + counts[run_i];
 
       // set is a sequential operation
-      int32x4 vec = {
-          values[run_i],
-          values[run_i],
-          values[run_i],
-          values[run_i]
-      };
+
+      typedef int32_t int32_VECSIZE __attribute__ ((vector_size (VECTORSIZE * sizeof(INTEGER))));
+
+      int32xVecSize vec;
+      typeof (vec) v_low = {values[run_i]};
+      int32_VECSIZE shufmask = {0};
+      vec = shuffle_vector<int32xVecSize, int32_VECSIZE>( v_low, shufmask );
+
       while (write_ptr < target_ptr) {
         // store is performed in a single cycle
-        store_unaligned<int32x4>(write_ptr, vec);
-        write_ptr += 8;
+        store_unaligned<int32xVecSize>(write_ptr, vec);
+        write_ptr += VECTORSIZE;
       }
       write_ptr = target_ptr;
     }

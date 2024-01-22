@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
     ColumnType typefilter;
     if (FLAGS_typefilter.empty()) {
         typefilter = ColumnType::UNDEFINED;
-    } else if (FLAGS_typefilter == "integer") {F
+    } else if (FLAGS_typefilter == "integer") {
         typefilter = ColumnType::INTEGER;
     } else if (FLAGS_typefilter == "double") {
         typefilter = ColumnType::DOUBLE;

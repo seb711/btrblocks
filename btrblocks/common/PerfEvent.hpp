@@ -62,6 +62,8 @@ struct PerfEvent {
     }
   };
 
+  enum EventDomain : uint8_t { USER = 0b1, KERNEL = 0b10, HYPERVISOR = 0b100, ALL = 0b111 };
+
   std::vector<event> events;
   std::vector<std::string> names;
   std::chrono::time_point<std::chrono::steady_clock> startTime;
@@ -71,6 +73,7 @@ struct PerfEvent {
 
   PerfEvent() : printHeader(true) {
     registerCounter("cycle", PERF_TYPE_HARDWARE, PERF_COUNT_HW_CPU_CYCLES);
+    registerCounter("kcycles", PERF_TYPE_HARDWARE, PERF_COUNT_HW_CPU_CYCLES, KERNEL);
     registerCounter("instr", PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS);
     registerCounter("L1-miss", PERF_TYPE_HW_CACHE,
                     PERF_COUNT_HW_CACHE_L1D | (PERF_COUNT_HW_CACHE_OP_READ << 8) |
@@ -92,20 +95,21 @@ struct PerfEvent {
     }
   }
 
-  void registerCounter(const std::string& name, uint64_t type, uint64_t eventID) {
+  void registerCounter(const std::string& name, uint64_t type, uint64_t eventID, EventDomain domain = ALL) {
     names.push_back(name);
-    events.emplace_back();
+    events.push_back(event());
     auto& event = events.back();
     auto& pe = event.pe;
     memset(&pe, 0, sizeof(struct perf_event_attr));
-    pe.type = type;
+    pe.type = static_cast<uint32_t>(type);
     pe.size = sizeof(struct perf_event_attr);
     pe.config = eventID;
     pe.disabled = true;
     pe.inherit = 1;
     pe.inherit_stat = 0;
-    pe.exclude_kernel = false;
-    pe.exclude_hv = false;
+    pe.exclude_user = !(domain & USER);
+    pe.exclude_kernel = !(domain & KERNEL);
+    pe.exclude_hv = !(domain & HYPERVISOR);
     pe.read_format = PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING;
   }
 

@@ -11,11 +11,11 @@ using INTEGER = btrblocks::s32;  // we use FOR always at the beginning so negati
 // -------------------------------------------------------------------------------------
 template <class NumberType>
 struct RLEStructure {
+  NumberType* data;
   btrblocks::u32 runs_count;
   btrblocks::u32 runs_count_offset;
   btrblocks::u8 values_scheme_code;
   btrblocks::u8 counts_scheme_code;
-  NumberType* data;
 };
 
 template <class NumberType, typename DecompressFn>
@@ -27,7 +27,6 @@ class RLE {
                RLEStructure<NumberType>* dest,
                btrblocks::u32 tuple_count,
                btrblocks::u8 allowed_cascading_level) {
-    auto* col_struct = reinterpret_cast<RLEStructure<NumberType>*>(dest);
     // -------------------------------------------------------------------------------------
     std::vector<NumberType> rle_values;
     std::vector<INTEGER> rle_count;
@@ -50,10 +49,10 @@ class RLE {
     rle_count.push_back(count);
     rle_values.push_back(last_item);
     // -------------------------------------------------------------------------------------
-    col_struct->runs_count = rle_count.size();
+    dest->runs_count = rle_count.size();
     die_if(rle_count.size() == rle_values.size());
     // -------------------------------------------------------------------------------------
-    auto* write_ptr = reinterpret_cast<btrblocks::u8*>(col_struct->data);
+    auto* write_ptr = reinterpret_cast<btrblocks::u8*>(dest->data);
 
     memcpy(write_ptr, rle_values.data(), rle_values.size() * sizeof(NumberType));
 

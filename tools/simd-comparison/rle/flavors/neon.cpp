@@ -13,13 +13,15 @@ struct neon_rle_decompression {
                       BitmapWrapper* nullmap,
                       const RLEStructure<T>* src,
                       btrblocks::u32 tuple_count,
-                      btrblocks::u32 level) {}
+                      btrblocks::u32 level) {
+    throw Generic_Exception("Not implemented");
+  }
 };
 
 #if defined(__ARM_NEON)
 template <>
 struct neon_rle_decompression<INTEGER> {
-  uint64_t operator()(INTEGER* dest,
+  void operator()(INTEGER* dest,
                       BitmapWrapper* nullmap,
                       const RLEStructure<INTEGER>* src,
                       btrblocks::u32 tuple_count,

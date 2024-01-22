@@ -13,13 +13,15 @@ struct avx2_rle_decompression {
                       BitmapWrapper* nullmap,
                       const RLEStructure<T>* src,
                       btrblocks::u32 tuple_count,
-                      btrblocks::u32 level) {}
+                      btrblocks::u32 level) {
+    throw Generic_Exception("Not implemented");
+  }
 };
 
 #if defined(__AVX2__)
 template <>
 struct avx2_rle_decompression<INTEGER> {
-  uint64_t operator()(INTEGER* dest,
+  void operator()(INTEGER* dest,
                       BitmapWrapper* nullmap,
                       const RLEStructure<INTEGER>* src,
                       btrblocks::u32 tuple_count,
@@ -33,8 +35,6 @@ struct avx2_rle_decompression<INTEGER> {
 
     // -------------------------------------------------------------------------------------
     auto write_ptr = dest;
-
-    auto upper_limit = dest + tuple_count;
 
     /// THIS IS THE INTERESTING PART HERE
     for (btrblocks::u32 run_i = 0; run_i < col_struct->runs_count; run_i++) {
