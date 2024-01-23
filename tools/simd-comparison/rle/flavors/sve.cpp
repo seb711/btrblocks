@@ -37,8 +37,6 @@ struct sve_rle_decompression<INTEGER> {
     // -------------------------------------------------------------------------------------
     auto write_ptr = dest;
 
-    auto upper_limit = dest + tuple_count;
-
     int w = svcntw();
     svbool_t tp = svptrue_b32();
 

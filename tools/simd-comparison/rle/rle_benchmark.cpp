@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
 #endif
 #if defined(__ARM_FEATURE_SVE)
       e.setParam("scheme", "sve");
-      RleBench<sve_rle_decompression<INTEGER>>("sve").measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
+      RleBench<sve_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #endif
 #endif
     }

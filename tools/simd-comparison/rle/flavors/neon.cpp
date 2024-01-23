@@ -37,8 +37,6 @@ struct neon_rle_decompression<INTEGER> {
     // -------------------------------------------------------------------------------------
     auto write_ptr = dest;
 
-    auto upper_limit = dest + tuple_count;
-
     /// THIS IS THE INTERESTING PART HERE
     for (btrblocks::u32 run_i = 0; run_i < col_struct->runs_count; run_i++) {
       auto target_ptr = write_ptr + counts[run_i];
