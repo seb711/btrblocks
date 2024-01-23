@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
       e.setParam("scheme", "comp_intrin_512");
       RleBench<compintrin_rle_decompression<INTEGER, 16>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
       e.setParam("scheme", "avx512");
-      RleBench<avx512_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, dest, out, NUM_ITERATIONS, e);
+      RleBench<avx512_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #endif
 #if defined(__ARM_NEON)
       e.setParam("scheme", "neon");
