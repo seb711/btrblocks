@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
 
       generate_dataset(in, tuple_cout, 2 << r);
 
-#if defined(__arm__)
+#if defined(__ARM_ARCH)
       e.setParam("arch", "arm");
 #elif defined(__x86_64__)
       e.setParam("arch", "x86");
