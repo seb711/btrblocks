@@ -1,7 +1,7 @@
 #include <tbb/parallel_for_each.h>
 
 #include <cstddef>
-#include "flavors/RLE.hpp"
+#include "RLE.hpp"
 
 #include "./flavors/avx2.cpp"
 #include "./flavors/avx512.cpp"
@@ -28,33 +28,30 @@ template <typename DecompressFn>
 class RleBench {
  protected:
   RLE<INTEGER, DecompressFn> rle_;
-  std::vector<INTEGER> out_;
-  RLEStructure<INTEGER>* dest_;
 
  public:
-  RleBench() : rle_(RLE<INTEGER, DecompressFn>()) { dest_ = new RLEStructure<INTEGER>(); }
+  RleBench() : rle_(RLE<INTEGER, DecompressFn>()) {}
 
-  void measure(std::vector<INTEGER>& in, size_t iterations, PerfEvent& event) {
+  void measure(INTEGER* in,
+               RLEStructure<INTEGER>* dest,
+               INTEGER* out,
+               int64_t tuple_count,
+               size_t iterations,
+               PerfEvent& event) {
     // results
-    dest_->data = new INTEGER[in.size() * 2];
-    rle_.compress(reinterpret_cast<INTEGER*>(in.data()), nullptr, dest_, in.size(), 0);
-
-    out_.clear();
-    out_.reserve(in.size() + SIMD_EXTRA_ELEMENTS(INTEGER));
+    rle_.compress(in, nullptr, dest, tuple_count, 0);
 
     for (uint64_t i = 0; i < iterations; i++) {
       {
-        PerfEventBlock b(event, in.size());
-        rle_.decompress(reinterpret_cast<INTEGER*>(out_.data()), nullptr, dest_, in.size(), 0);
+        PerfEventBlock b(event, tuple_count);
+        rle_.decompress(out, nullptr, dest, tuple_count, 0);
       }
     }
-
-    delete[] dest_->data;
   }
 
   bool _verify(std::vector<INTEGER>& in, std::vector<INTEGER>& out) {
     for (size_t i = 0; i < in.size(); ++i) {
-      if (in[i] != out_[i]) {
+      if (in[i] != out[i]) {
         return false;
       }
     }
@@ -62,12 +59,10 @@ class RleBench {
   }
 };
 
-void generate_dataset(std::vector<INTEGER>& output,
+void generate_dataset(INTEGER* output,
                       size_t dataset_size,
                       size_t dataset_runlength,
                       int seed = 42) {
-  output.resize(dataset_size);
-
   std::mt19937 gen(seed);
 
   tbb::parallel_for(tbb::blocked_range<size_t>(0, dataset_size), [&](tbb::blocked_range<size_t> r) {
@@ -89,47 +84,64 @@ void generate_dataset(std::vector<INTEGER>& output,
 using namespace btrblocks_simd_comparison;
 
 int main(int argc, char** argv) {
-  std::vector<INTEGER> dataset;
-
   PerfEvent e;
 
-  std::vector<uint32_t> datasetSizes = { (1 << 20) / sizeof(INTEGER),  (1 << 30) / sizeof(INTEGER) };
+  std::vector<uint64_t > datasetSizes = {(1 << 24), (static_cast<uint64_t>(1) << static_cast<uint64_t>(31))};
 
   for (auto& datasetSize : datasetSizes) {
-    e.setParam("item_size", datasetSize);
+    uint64_t tuple_cout = datasetSize / 4;
+    // reserve here the correct space
+    auto* in = new INTEGER[tuple_cout];
+    auto* out = new INTEGER[tuple_cout + SIMD_EXTRA_ELEMENTS(INTEGER)];
+    auto* dest = new RLEStructure<INTEGER>();
+    dest->data = new INTEGER[tuple_cout * 2];
 
-  for (size_t r = 5; r < 8; r++) {
-    e.setParam("runlength", 2 << r);
+    e.setParam("item_size", tuple_cout);
 
-    generate_dataset(dataset, datasetSize,
-                     2 << r);
+    for (size_t r = 5; r < 8; r++) {
+      e.setParam("runlength", 2 << r);
 
-    e.setParam("scheme", "naive");
-    RleBench<naive_rle_decompression<INTEGER>>().measure(dataset, NUM_ITERATIONS, e);
+      generate_dataset(in, tuple_cout, 2 << r);
+
+#if defined(__arm__)
+      e.setParam("arch", "arm");
+#elif defined(__x86_64__)
+      e.setParam("arch", "x86");
+#endif
+
+      e.setParam("scheme", "naive");
+      RleBench<naive_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #if defined(__GNUC__)
-    e.setParam("scheme", "comp_intrin_128");
-    RleBench<compintrin_rle_decompression<INTEGER, 4>>().measure(dataset, NUM_ITERATIONS, e);
+      e.setParam("scheme", "comp_intrin_128");
+      RleBench<compintrin_rle_decompression<INTEGER, 4>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #if defined(__AVX2__)
-    e.setParam("scheme", "comp_intrin_256");
-    RleBench<compintrin_rle_decompression<INTEGER, 8>>().measure(dataset, NUM_ITERATIONS, e);
-    e.setParam("scheme", "avx2");
-    RleBench<avx2_rle_decompression<INTEGER>>().measure(dataset, NUM_ITERATIONS, e);
+      e.setParam("scheme", "comp_intrin_256");
+      RleBench<compintrin_rle_decompression<INTEGER, 8>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
+      e.setParam("scheme", "avx2");
+      RleBench<avx2_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #endif
 #if defined(__AVX512VL__)
-    e.setParam("scheme", "comp_intrin_512");
-    RleBench<compintrin_rle_decompression<INTEGER, 16>>().measure(dataset, NUM_ITERATIONS, e);
-    e.setParam("scheme", "avx512");
-    RleBench<avx512_rle_decompression<INTEGER>>().measure(dataset, NUM_ITERATIONS, e);
+      e.setParam("scheme", "comp_intrin_512");
+      RleBench<compintrin_rle_decompression<INTEGER, 16>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
+      e.setParam("scheme", "avx512");
+      RleBench<avx512_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, dest, out, NUM_ITERATIONS, e);
 #endif
 #if defined(__ARM_NEON)
-    e.setParam("scheme", "neon");
-    RleBench<neon_rle_decompression<INTEGER>>().measure(dataset, NUM_ITERATIONS, e);
+      e.setParam("scheme", "neon");
+      RleBench<neon_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #endif
 #if defined(__ARM_FEATURE_SVE)
-    e.setParam("scheme", "sve");
-    RleBench<sve_rle_decompression<INTEGER>>("sve").measure(dataset, NUM_ITERATIONS, e);
+      e.setParam("scheme", "sve");
+      RleBench<sve_rle_decompression<INTEGER>>("sve").measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #endif
 #endif
-  }
+    }
+
+
+    // delete allocated space
+    delete[] in;
+    delete[] out;
+    delete[] dest->data;
+    delete dest;
   }
 }

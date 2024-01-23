@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RLE.hpp"
+#include "../RLE.hpp"
 #include "extern/RoaringBitmap.hpp"
 
 // -------------------------------------------------------------------------------------
