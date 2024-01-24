@@ -133,6 +133,10 @@ int main(int argc, char** argv) {
 #if defined(__ARM_FEATURE_SVE)
       e.setParam("scheme", "sve");
       RleBench<sve_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
+      e.setParam("scheme", "comp_intrin_256");
+      RleBench<compintrin_rle_decompression<INTEGER, 8>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
+      e.setParam("scheme", "comp_intrin_512");
+      RleBench<compintrin_rle_decompression<INTEGER, 16>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
 #endif
 #endif
     }
