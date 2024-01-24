@@ -22,7 +22,7 @@ namespace btrblocks_simd_comparison {
 // - we need different sizes of datasets
 
 static constexpr uint64_t NUM_ITERATIONS = 3;
-static constexpr uint64_t NUM_UNIQUE = 3;
+static constexpr uint64_t NUM_UNIQUE = 1024;
 
 template <typename DecompressFn>
 class RleBench {
@@ -43,7 +43,7 @@ class RleBench {
 
     for (uint64_t i = 0; i < iterations; i++) {
       {
-        PerfEventBlock b(event, tuple_count);
+        PerfEventBlock b(event, dest->runs_count);
         rle_.decompress(out, nullptr, dest, tuple_count, 0);
       }
     }
