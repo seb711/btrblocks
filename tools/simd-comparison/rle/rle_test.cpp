@@ -2,10 +2,10 @@
 
 #include "gtest/gtest.h"
 
-#include "./flavors/plain.cpp"
-#include "./flavors/compintrin.cpp"
 #include "./flavors/avx2.cpp"
 #include "./flavors/avx512.cpp"
+#include "./flavors/compintrin.cpp"
+#include "./flavors/naive.cpp"
 #include "./flavors/neon.cpp"
 #include "./flavors/sve.cpp"
 
