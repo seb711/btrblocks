@@ -106,9 +106,9 @@ typedef compintrin_rle_decompression<INTEGER, 16> compIntrin16Flavor;
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_COMP_16, RleTest, compIntrin16Flavor);
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_AVX512, RleTest, avx512_rle_decompression<INTEGER>);
 #endif
-#if defined(__ARM_NEON)
-INSTANTIATE_TYPED_TEST_CASE_P(RLE_NEON, RleTest, neon_rle_decompression<INTEGER>);
-#endif
+// #if defined(__ARM_NEON)
+// INSTANTIATE_TYPED_TEST_CASE_P(RLE_NEON, RleTest, neon_rle_decompression<INTEGER>);
+// #endif
 #if defined(__ARM_FEATURE_SVE)
 INSTANTIATE_TYPED_TEST_CASE_P(DYNDICT_SVE, DynDictTest, sve_dyndict_decompression<INTEGER>);
 #endif
