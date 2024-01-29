@@ -52,10 +52,10 @@ struct sve_dyndict_decompression<INTEGER> {
         svint32_t values_3 = svldnt1_gather_u32offset_s32(tp, dict, codes_3);
 
         // store values
-        svst1_s32(tp, reinterpret_cast<svint32_t*>(dest + w), values_0);
-        svst1_s32(tp, reinterpret_cast<svint32_t*>(dest + 2 * w), values_1);
-        svst1_s32(tp, reinterpret_cast<svint32_t*>(dest + 3 * w), values_2);
-        svst1_s32(tp, reinterpret_cast<svint32_t*>(dest + 4 * w), values_3);
+        svst1_s32(tp, reinterpret_cast<uint32_t*>(dest + w), values_0);
+        svst1_s32(tp, reinterpret_cast<uint32_t*>(dest + 2 * w), values_1);
+        svst1_s32(tp, reinterpret_cast<uint32_t*>(dest + 3 * w), values_2);
+        svst1_s32(tp, reinterpret_cast<uint32_t*>(dest + 4 * w), values_3);
 
         dest += w * 4;
         codes += w * 4;
