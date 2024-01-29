@@ -40,10 +40,10 @@ struct sve_dyndict_decompression<INTEGER> {
     if (tuple_count >= w * 4) {
       while (i < tuple_count - (w * 4 - 1)) {
         // Load codes.
-        svuint32_t codes_0 = svld1_u32(reinterpret_cast<const svuint32_t*>(tp, codes + w));
-        svuint32_t codes_1 = svld1_u32(reinterpret_cast<const svuint32_t*>(tp, codes + 2 * w));
-        svuint32_t codes_2 = svld1_u32(reinterpret_cast<const svuint32_t*>(tp, codes + 3 * w));
-        svuint32_t codes_3 = svld1_u32(reinterpret_cast<const svuint32_t*>(tp, codes + 4 * w));
+        svuint32_t codes_0 = svld1_u32(tp, reinterpret_cast<const svuint32_t*>(codes + w));
+        svuint32_t codes_1 = svld1_u32(tp, reinterpret_cast<const svuint32_t*>(codes + 2 * w));
+        svuint32_t codes_2 = svld1_u32(tp, reinterpret_cast<const svuint32_t*>(codes + 3 * w));
+        svuint32_t codes_3 = svld1_u32(tp, reinterpret_cast<const svuint32_t*>(codes + 4 * w));
 
         // Gather values.
         svint32_t values_0 = svldnt1_gather_u32offset_s32(tp, dict, codes_0);
