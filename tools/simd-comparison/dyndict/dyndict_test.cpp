@@ -110,7 +110,7 @@ INSTANTIATE_TYPED_TEST_CASE_P(RLE_AVX512, RleTest, avx512_rle_decompression<INTE
 INSTANTIATE_TYPED_TEST_CASE_P(RLE_NEON, RleTest, neon_rle_decompression<INTEGER>);
 #endif
 #if defined(__ARM_FEATURE_SVE)
-INSTANTIATE_TYPED_TEST_CASE_P(RLE_SVE, RleTest, sve_rle_decompression<INTEGER>);
+INSTANTIATE_TYPED_TEST_CASE_P(DYNDICT_SVE, DynDictTest, sve_dyndict_decompression<INTEGER>);
 #endif
 #endif
 
