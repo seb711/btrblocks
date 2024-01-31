@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
 #endif
 #if defined(__AVX512VL__)
     e.setParam("scheme", "avx512");
-    RleBench<avx512_dyndict_decompression<INTEGER>>().measure(in, dictStruc_, out, stats,
+    DynDictBench<avx512_dyndict_decompression<INTEGER>>().measure(in, dictStruc_, out, stats,
                                                               NUM_ITERATIONS, e);
 #endif
 #if defined(__ARM_FEATURE_SVE2)
