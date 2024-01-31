@@ -94,22 +94,16 @@ REGISTER_TYPED_TEST_CASE_P(DynDictTest,
 
 INSTANTIATE_TYPED_TEST_CASE_P(DYNDICT_NAIVE, DynDictTest, naive_dyndict_decompression<INTEGER>);
 #if defined(__GNUC__)
-/*typedef compintrin_rle_decompression<INTEGER, 4> compIntrin4Flavor;
-INSTANTIATE_TYPED_TEST_CASE_P(RLE_COMP_128, RleTest, compIntrin4Flavor); */
 #if defined(__AVX2__)
-/*typedef compintrin_rle_decompression<INTEGER, 8> compIntrin8Flavor;
-INSTANTIATE_TYPED_TEST_CASE_P(RLE_COMP_256, RleTest, compIntrin8Flavor);*/
 INSTANTIATE_TYPED_TEST_CASE_P(DYNDICT_AVX2, DynDictTest, avx2_dyndict_decompression<INTEGER>);
 #endif
 #if defined(__AVX512VL__)
-typedef compintrin_rle_decompression<INTEGER, 16> compIntrin16Flavor;
-INSTANTIATE_TYPED_TEST_CASE_P(RLE_COMP_16, RleTest, compIntrin16Flavor);
-INSTANTIATE_TYPED_TEST_CASE_P(RLE_AVX512, RleTest, avx512_rle_decompression<INTEGER>);
+INSTANTIATE_TYPED_TEST_CASE_P(DYNDICT_AVX512, DynDictTest, avx512_dyndict_decompression<INTEGER>);
 #endif
 // #if defined(__ARM_NEON)
 // INSTANTIATE_TYPED_TEST_CASE_P(RLE_NEON, RleTest, neon_rle_decompression<INTEGER>);
 // #endif
-#if defined(__ARM_FEATURE_SVE)
+#if defined(__ARM_FEATURE_SVE2)
 INSTANTIATE_TYPED_TEST_CASE_P(DYNDICT_SVE, DynDictTest, sve_dyndict_decompression<INTEGER>);
 #endif
 #endif

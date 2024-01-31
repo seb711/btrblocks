@@ -17,7 +17,7 @@ struct sve_dyndict_decompression {
   }
 };
 
-#if defined(__ARM_FEATURE_SVE)
+#if defined(__ARM_FEATURE_SVE2)
 template <>
 struct sve_dyndict_decompression<INTEGER> {
   void operator()(INTEGER* dest,
