@@ -29,7 +29,7 @@ set(FASTPFOR_LIBRARY_PATH ${binary_dir}/libFastPFOR.a)
 
 file(MAKE_DIRECTORY ${FASTPFOR_INCLUDE_DIR})
 
-add_library(fastpfor SHARED IMPORTED)
+add_library(fastpfor STATIC IMPORTED)
 add_dependencies(fastpfor fastpfor_src)
 target_include_directories(fastpfor SYSTEM INTERFACE ${FASTPFOR_INCLUDE_DIR})
 

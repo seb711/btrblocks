@@ -6,4 +6,5 @@ Name: BtrBlocks
 Description: @PROJECT_DESCRIPTION@
 Version: @PROJECT_VERSION@
 Libs: -L${libdir} -lBtrBlocks
+Requires: fsst FastPFOR croaring
 Cflags: -I${includedir}

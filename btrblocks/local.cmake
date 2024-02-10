@@ -55,7 +55,7 @@ endforeach ()
 if (${BUILD_SHARED_LIBRARY})
     add_library(btrblocks SHARED ${BTR_CC})
 else ()
-    add_library(btrblocks SHARED ${BTR_CC})
+    add_library(btrblocks STATIC ${BTR_CC})
 endif ()
 
 
@@ -91,8 +91,6 @@ install(TARGETS btrblocks
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
         INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
-
-set(PACKAGE_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks")
 
 install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
