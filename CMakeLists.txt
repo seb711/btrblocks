@@ -94,11 +94,6 @@ install(EXPORT BtrBlocksTargets
 
 include(CMakePackageConfigHelpers)
 
-install(EXPORT MathFunctionsTargets
-        FILE MathFunctionsTargets.cmake
-        DESTINATION lib/cmake/MathFunctions
-)
-
 include(CMakePackageConfigHelpers)
 # generate the config file that includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
