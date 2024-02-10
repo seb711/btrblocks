@@ -97,9 +97,10 @@ install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
-install(FILES ${BTR_PUBLIC_INCLUDE_DIR}
-        DESTINATION ${CMAKE_BINARY_DIR}/all_headers
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+
+file(GLOB_RECURSE HEADER_FILES "${BTR_PUBLIC_INCLUDE_DIR}/*.hpp" "${BTR_PUBLIC_INCLUDE_DIR}/*.h")
+install(FILES ${HEADER_FILES}
+        DESTINATION ${CMAKE_BINARY_DIR}/all_headers)
 
 # ---------------------------------------------------------------------------
 # Linting
