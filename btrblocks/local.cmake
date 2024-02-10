@@ -87,11 +87,12 @@ set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 # ---------------------------------------------------------------------------
 
 install(TARGETS btrblocks
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+message("BTR_PUBLIC_INCLUDE_DIR ${BTR_PUBLIC_INCLUDE_DIR}" "${CMAKE_INSTALL_INCLUDEDIR}")
 
 install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/btrblocks"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
 # ---------------------------------------------------------------------------
