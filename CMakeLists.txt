@@ -86,7 +86,7 @@ endif()
 # ---------------------------------------------------------------------------
 # INSTALL
 # ---------------------------------------------------------------------------
-
+include(GNUInstallDirs)
 install(FILES
         "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfigVersion.cmake"
