@@ -33,11 +33,11 @@ ExternalProject_Get_Property(fsst_src source_dir)
 ExternalProject_Get_Property(fsst_src binary_dir)
 
 set(FSST_INCLUDE_DIR ${source_dir}/)
-set(FSST_LIBRARY_PATH ${binary_dir}/libfsst.so)
+set(FSST_LIBRARY_PATH ${binary_dir}/libfsst.a)
 
 file(MAKE_DIRECTORY ${FSST_INCLUDE_DIR})
 
-add_library(fsst SHARED IMPORTED)
+add_library(fsst STATIC IMPORTED)
 add_dependencies(fsst fsst_src)
 
 

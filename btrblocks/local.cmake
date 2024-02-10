@@ -55,7 +55,7 @@ endforeach ()
 if (${BUILD_SHARED_LIBRARY})
     add_library(btrblocks SHARED ${BTR_CC})
 else ()
-    add_library(btrblocks SHARED ${BTR_CC})
+    add_library(btrblocks STATIC ${BTR_CC})
 endif ()
 
 
@@ -66,7 +66,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 endif ()
 target_compile_options(btrblocks PUBLIC -Wno-unused-parameter)
 
-target_link_libraries(btrblocks PUBLIC Threads::Threads fsst fastpfor croaring dynamic_bitset) #asan
+target_link_libraries(btrblocks LINK_PUBLIC Threads::Threads fsst fastpfor croaring dynamic_bitset) #asan
 
 if (${WITH_LOGGING})
     target_link_libraries(btrblocks spdlog)
