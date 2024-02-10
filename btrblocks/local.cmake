@@ -89,20 +89,9 @@ set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 install(TARGETS btrblocks
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-message("BTR_PRIVATE_INCLUDE_DIR ${BTR_PUBLIC_INCLUDE_DIR}")
-message("BTR_PUBLIC_INCLUDE_DIR ${BTR_PUBLIC_INCLUDE_DIR}")
-message("BTR_PUBLIC_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR}")
-
 install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
-
-
-file(GLOB_RECURSE HEADER_FILES "${BTR_PUBLIC_INCLUDE_DIR}/*.hpp" "${BTR_PUBLIC_INCLUDE_DIR}/*.h")
-
-message("${CMAKE_INSTALL_LIBDIR}/headers")
-install(FILES ${HEADER_FILES}
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/headers")
 
 # ---------------------------------------------------------------------------
 # Linting
@@ -112,5 +101,5 @@ add_clang_tidy_target(lint_src "${BTR_CC_LINTING}")
 list(APPEND lint_targets lint_src)
 
 configure_file("btrblocks.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/btrblocks.pc" @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/btrblocks.pc"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/fastpfor.pc"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
