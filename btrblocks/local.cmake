@@ -55,7 +55,7 @@ endforeach ()
 if (${BUILD_SHARED_LIBRARY})
     add_library(btrblocks SHARED ${BTR_CC})
 else ()
-    add_library(btrblocks STATIC ${BTR_CC})
+    add_library(btrblocks SHARED ${BTR_CC})
 endif ()
 
 
