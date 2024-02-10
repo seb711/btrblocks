@@ -3,3 +3,5 @@
 include("${CMAKE_CURRENT_LIST_DIR}/btrblocksTargets.cmake")
 
 check_required_components(btrblocks fsst fastpfor croaring)
+
+configure_file(${CMAKE_SOURCE_DIR}/btrblocksConfig.cmake.in ${CMAKE_BINARY_DIR}/btrblocksConfig.cmake @ONLY)
