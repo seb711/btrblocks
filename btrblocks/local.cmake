@@ -99,3 +99,7 @@ install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
 
 add_clang_tidy_target(lint_src "${BTR_CC_LINTING}")
 list(APPEND lint_targets lint_src)
+
+configure_file("btrblocks.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/btrblocks.pc" @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/btrblocks.pc"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
