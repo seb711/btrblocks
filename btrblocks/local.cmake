@@ -75,14 +75,12 @@ endif()
 # TODO including everything as public headers, as this is a research library
 # later on we might want to extract a minimal public interface.
 set(BTR_PUBLIC_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR})
-set(BTR_PRIVATE_INCLUDE_DIR)
 set(BTR_INCLUDE_DIR ${BTR_PUBLIC_INCLUDE_DIR} ${BTR_PRIVATE_INCLUDE_DIR})
 
 target_include_directories(btrblocks
-    PUBLIC ${BTR_PUBLIC_INCLUDE_DIR}
-    PRIVATE ${BTR_PRIVATE_INCLUDE_DIR})
+    PUBLIC ${BTR_PUBLIC_INCLUDE_DIR})
 
-# set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
+set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 
 # ---------------------------------------------------------------------------
 # Installation
