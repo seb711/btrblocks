@@ -35,7 +35,7 @@ set(FSST_LIBRARY_PATH ${binary_dir}/libfsst.a)
 
 file(MAKE_DIRECTORY ${FSST_INCLUDE_DIR})
 
-add_library(fsst STATIC IMPORTED)
+add_library(fsst SHARED IMPORTED)
 add_dependencies(fsst fsst_src)
 
 
