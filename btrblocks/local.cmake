@@ -99,10 +99,10 @@ install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
 
 
 file(GLOB_RECURSE HEADER_FILES "${BTR_PUBLIC_INCLUDE_DIR}/*.hpp" "${BTR_PUBLIC_INCLUDE_DIR}/*.h")
-message("HEADER_FILES ${HEADER_FILES}")
 
+message("${CMAKE_INSTALL_LIBDIR}/headers")
 install(FILES ${HEADER_FILES}
-        DESTINATION ${CMAKE_BINARY_DIR}/all_headers)
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/headers")
 
 # ---------------------------------------------------------------------------
 # Linting
