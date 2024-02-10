@@ -33,7 +33,7 @@ set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CRO
 # Dependencies
 add_dependencies(croaring croaring_src)
 
-install(TARGETS croaring
+install(TARGET croaring
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
