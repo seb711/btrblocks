@@ -87,17 +87,26 @@ endif()
 # INSTALL
 # ---------------------------------------------------------------------------
 
+install(EXPORT BtrBlocksTargets
+        FILE BtrBlocksTargets.cmake
+        DESTINATION lib/cmake/btrblocks
+)
+
+include(CMakePackageConfigHelpers)
+
+install(EXPORT MathFunctionsTargets
+        FILE MathFunctionsTargets.cmake
+        DESTINATION lib/cmake/MathFunctions
+)
+
+include(CMakePackageConfigHelpers)
+# generate the config file that includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
         "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
         INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
+        NO_SET_AND_CHECK_MACRO
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO
 )
-
-install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
-)
-
 # ---------------------------------------------------------------------------
 # Print Configuration
 # ---------------------------------------------------------------------------
