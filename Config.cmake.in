@@ -4,5 +4,6 @@ set(CROARING_INCLUDE_DIR "@CROARING_INCLUDE_DIR@")
 set(CROARING_LIBRARY_PATH "@CROARING_LIBRARY_PATH@")
 
 include("${CMAKE_CURRENT_LIST_DIR}/btrblocksTargets.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/croaring.cmake")
 
 check_required_components(btrblocks)
