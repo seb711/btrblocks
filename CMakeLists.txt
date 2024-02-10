@@ -31,7 +31,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include("cmake/environment.cmake") # Set environment-specific compiler flags
 include("cmake/clang-tidy.cmake") # Integrate clang-tidy
-
+include(CMakePackageConfigHelpers)
 # ---------------------------------------------------------------------------
 # Dependencies
 # ---------------------------------------------------------------------------
@@ -82,6 +82,21 @@ if (NOT "${lint_targets}" STREQUAL "")
   add_custom_target(lint)
   add_dependencies(lint ${lint_targets})
 endif()
+
+# ---------------------------------------------------------------------------
+# INSTALL
+# ---------------------------------------------------------------------------
+
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
+)
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
+)
 
 # ---------------------------------------------------------------------------
 # Print Configuration

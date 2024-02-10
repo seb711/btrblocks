@@ -78,7 +78,8 @@ set(BTR_PUBLIC_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(BTR_INCLUDE_DIR ${BTR_PUBLIC_INCLUDE_DIR} ${BTR_PRIVATE_INCLUDE_DIR})
 
 target_include_directories(btrblocks
-    PUBLIC ${BTR_PUBLIC_INCLUDE_DIR})
+    PUBLIC ${BTR_PUBLIC_INCLUDE_DIR}
+)
 
 set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 
@@ -87,9 +88,11 @@ set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 # ---------------------------------------------------------------------------
 
 install(TARGETS btrblocks
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+        EXPORT btrblocksTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 # ---------------------------------------------------------------------------
@@ -98,7 +101,3 @@ install(TARGETS btrblocks
 
 add_clang_tidy_target(lint_src "${BTR_CC_LINTING}")
 list(APPEND lint_targets lint_src)
-
-configure_file("btrblocks.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/btrblocks.pc" @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/btrblocks.pc"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
