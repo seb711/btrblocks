@@ -1,5 +1,8 @@
 @PACKAGE_INIT@
 
+include(CMakeFindDependencyMacro)
+find_dependency(Threads)
+
 set(CROARING_INCLUDE_DIR "@CROARING_INCLUDE_DIR@")
 set(CROARING_LIBRARY_PATH "@CROARING_LIBRARY_PATH@")
 

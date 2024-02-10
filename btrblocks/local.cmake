@@ -88,7 +88,7 @@ set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 # ---------------------------------------------------------------------------
 
 install(TARGETS btrblocks
-        EXPORT btrblocksTargets
+        EXPORT BtrBlocksTargets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
