@@ -93,13 +93,6 @@ install(FILES
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
 )
 
-install(EXPORT BtrBlocksTargets
-        FILE BtrBlocksTargets.cmake
-        DESTINATION lib/cmake/btrblocks
-)
-
-include(CMakePackageConfigHelpers)
-
 include(CMakePackageConfigHelpers)
 # generate the config file that includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
