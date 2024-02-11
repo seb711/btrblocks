@@ -68,7 +68,7 @@ class TFrequency {
     }
     // -------------------------------------------------------------------------------------
     vector<NumberType> exceptions;
-    Roaring exceptions_bitmap;
+    roaring::Roaring exceptions_bitmap;
     for (u32 row_i = 0; row_i < stats.tuple_count; row_i++) {
       if (src[row_i] != col_struct.top_value && (nullmap == nullptr || nullmap[row_i])) {
         exceptions.push_back(src[row_i]);
@@ -103,8 +103,8 @@ class TFrequency {
                                       u32 level) {
     const auto& col_struct = *reinterpret_cast<const FrequencyStructure<NumberType>*>(src);
     // -------------------------------------------------------------------------------------
-    Roaring exceptions_bitmap =
-        Roaring::read(reinterpret_cast<const char*>(col_struct.data), false);
+    roaring::Roaring exceptions_bitmap =
+        roaring::Roaring::read(reinterpret_cast<const char*>(col_struct.data), false);
     thread_local std::vector<std::vector<NumberType>> exceptions_v;
     auto exceptions = get_level_data(
         exceptions_v, exceptions_bitmap.cardinality() + SIMD_EXTRA_ELEMENTS(NumberType), level);
@@ -139,8 +139,8 @@ class TFrequency {
     const auto& col_struct = *reinterpret_cast<const FrequencyStructure<NumberType>*>(src);
     auto result = selfDescription;
 
-    Roaring exceptions_bitmap =
-        Roaring::read(reinterpret_cast<const char*>(col_struct.data), false);
+    roaring::Roaring exceptions_bitmap =
+        roaring::Roaring::read(reinterpret_cast<const char*>(col_struct.data), false);
     if (exceptions_bitmap.cardinality() > 0) {
       auto& scheme =
           CSchemePicker<NumberType, SchemeType, StatsType,

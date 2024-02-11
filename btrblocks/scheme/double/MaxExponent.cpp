@@ -100,8 +100,8 @@ u32 MaxExponent::compress(const DOUBLE* src,
     }
   }
 
-  Roaring exceptions_bitmap;
-  Roaring negative_bitmap;
+  roaring::Roaring exceptions_bitmap;
+  roaring::Roaring negative_bitmap;
 
   for (u32 row_i = 0; row_i < stats.tuple_count; row_i++) {
     u64 sd;
