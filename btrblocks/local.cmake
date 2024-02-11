@@ -66,7 +66,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 endif ()
 target_compile_options(btrblocks PUBLIC -Wno-unused-parameter)
 
-target_link_libraries(btrblocks LINK_PUBLIC Threads::Threads fsst fastpfor croaring dynamic_bitset) #asan
+target_link_libraries(btrblocks PUBLIC Threads::Threads fsst fastpfor croaring dynamic_bitset) #asan
 
 if (${WITH_LOGGING})
     target_link_libraries(btrblocks spdlog)
@@ -88,7 +88,6 @@ set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 # ---------------------------------------------------------------------------
 
 install(TARGETS btrblocks
-        EXPORT BtrBlocksExport
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

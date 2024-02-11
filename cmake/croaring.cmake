@@ -25,7 +25,9 @@ ExternalProject_Get_Property(croaring_src install_dir)
 set(CROARING_INCLUDE_DIR ${install_dir}/include)
 set(CROARING_LIBRARY_PATH ${install_dir}/lib/libroaring.a)
 file(MAKE_DIRECTORY ${CROARING_INCLUDE_DIR})
-add_library(croaring STATIC IMPORTED)
+add_library(croaring SHARED IMPORTED)
+set_property(TARGET croaring PROPERTY IMPORTED_LOCATION ${CROARING_LIBRARY_PATH})
+set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CROARING_INCLUDE_DIR})
 
 include_directories(${CROARING_INCLUDE_DIR})
 
@@ -38,6 +40,3 @@ ExternalProject_Add_Step(
         COMMAND cmake -E copy_directory ${install_dir}/lib ${GLOBAL_OUTPUT_PATH}
         DEPENDEES install
 )
-
-set(CROARING_LIBRARY_PATH "${CMAKE_SHARED_LIBRARY_PREFIX}croaring${CMAKE_SHARED_LIBRARY_SUFFIX}")
-include_directories(${HumbleLogging_INCLUDE_DIRS})
