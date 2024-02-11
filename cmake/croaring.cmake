@@ -31,12 +31,9 @@ set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CRO
 
 include_directories("${CROARING_INCLUDE_DIR}")
 
-ExternalProject_Add_Step(
-        croaring_src CopyToBin
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${install_dir}/include "${CMAKE_INSTALL_INCLUDEDIR}"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${install_dir}/lib "${CMAKE_INSTALL_INCLUDEDIR}"
-        DEPENDEES install
-)
+install(DIRECTORY ${CROARING_INCLUDE_DIR}
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
 # Dependencies
 add_dependencies(croaring croaring_src)
