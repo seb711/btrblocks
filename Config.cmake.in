@@ -1,5 +1,7 @@
 @PACKAGE_INIT@
 
+include("${CMAKE_CURRENT_LIST_DIR}/btrblocksTargets.cmake")
+
 include_directories(@GLOBAL_OUTPUT_PATH@")
 
 include(CMakeFindDependencyMacro)
@@ -10,7 +12,5 @@ if (NOT croaring_FOUND)
   set(croaring_FOUND 0)
   set(croaring_NOT_FOUND_MESSAGE "croaring not found: ${croaring_NOT_FOUND_MESSAGE}")
 endif ()
-
-include("${CMAKE_CURRENT_LIST_DIR}/btrblocksTargets.cmake")
 
 check_required_components(btrblocks)
