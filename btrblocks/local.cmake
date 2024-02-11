@@ -88,11 +88,11 @@ set_target_properties(btrblocks PROPERTIES PUBLIC_HEADER "${BTR_HH}")
 # ---------------------------------------------------------------------------
 
 install(TARGETS btrblocks
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+install(DIRECTORY ${BTR_PUBLIC_INCLUDE_DIR}
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
 # ---------------------------------------------------------------------------
 # Linting

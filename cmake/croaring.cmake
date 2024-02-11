@@ -29,5 +29,16 @@ add_library(croaring SHARED IMPORTED)
 set_property(TARGET croaring PROPERTY IMPORTED_LOCATION ${CROARING_LIBRARY_PATH})
 set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CROARING_INCLUDE_DIR})
 
+include_directories("${CROARING_INCLUDE_DIR}")
+
+ExternalProject_Add_Step(
+        croaring_src CopyToBin
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${install_dir}/include "${CMAKE_INSTALL_INCLUDEDIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${install_dir}/lib "${CMAKE_INSTALL_INCLUDEDIR}"
+        DEPENDEES install
+)
+
 # Dependencies
 add_dependencies(croaring croaring_src)
+
+

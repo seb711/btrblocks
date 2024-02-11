@@ -1,6 +1,6 @@
 @PACKAGE_INIT@
 
-include_directories(@CROARING_INCLUDE_DIR@")
+include_directories("@CROARING_INCLUDE_DIR@")
 
 include(CMakeFindDependencyMacro)
 find_dependency(Threads)
