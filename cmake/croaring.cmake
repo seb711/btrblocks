@@ -26,8 +26,6 @@ set(CROARING_INCLUDE_DIR ${install_dir}/include)
 set(CROARING_LIBRARY_PATH ${install_dir}/lib/libroaring.so)
 file(MAKE_DIRECTORY ${CROARING_INCLUDE_DIR})
 add_library(croaring SHARED IMPORTED)
-set_property(TARGET croaring PROPERTY IMPORTED_LOCATION ${CROARING_LIBRARY_PATH})
-set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CROARING_INCLUDE_DIR})
 include_directories(${CROARING_INCLUDE_DIR})
 
 # Dependencies
@@ -39,3 +37,6 @@ ExternalProject_Add_Step(
         COMMAND cmake -E copy_directory ${install_dir}/lib ${GLOBAL_OUTPUT_PATH}
         DEPENDEES install
 )
+
+set_property(TARGET croaring PROPERTY IMPORTED_LOCATION ${GLOBAL_OUTPUT_PATH}/croaring)
+set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CROARING_INCLUDE_DIR}/libroaring.so)
