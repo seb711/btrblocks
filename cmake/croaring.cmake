@@ -23,22 +23,11 @@ ExternalProject_Add(
 # Prepare croaring
 ExternalProject_Get_Property(croaring_src install_dir)
 set(CROARING_INCLUDE_DIR ${install_dir}/include)
-set(CROARING_LIBRARY_PATH ${install_dir}/lib/libroaring.so)
+set(CROARING_LIBRARY_PATH ${install_dir}/lib/libroaring.a)
 file(MAKE_DIRECTORY ${CROARING_INCLUDE_DIR})
-add_library(croaring SHARED IMPORTED)
+add_library(croaring STATIC IMPORTED)
 set_property(TARGET croaring PROPERTY IMPORTED_LOCATION ${CROARING_LIBRARY_PATH})
 set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CROARING_INCLUDE_DIR})
-include_directories(${CROARING_INCLUDE_DIR})
 
 # Dependencies
 add_dependencies(croaring croaring_src)
-
-ExternalProject_Add_Step(
-        croaring_src CopyToBin
-        COMMAND cmake -E copy_directory ${CROARING_INCLUDE_DIR} ${GLOBAL_OUTPUT_PATH}
-        COMMAND cmake -E copy_directory ${install_dir}/lib ${GLOBAL_OUTPUT_PATH}
-        DEPENDEES install
-)
-
-set_property(TARGET croaring PROPERTY IMPORTED_LOCATION ${GLOBAL_OUTPUT_PATH}/libroaring.so)
-set_property(TARGET croaring APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${GLOBAL_OUTPUT_PATH})

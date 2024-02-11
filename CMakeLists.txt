@@ -25,7 +25,6 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -g")
 add_compile_options(-march=native -Wall -Wextra)
-set(GLOBAL_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -89,7 +88,7 @@ endif()
 # ---------------------------------------------------------------------------
 include(GNUInstallDirs)
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksTargets.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfigVersion.cmake"
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
 )
