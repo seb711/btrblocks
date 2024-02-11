@@ -42,37 +42,37 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_VENDOR_DIR "${CMAKE_SOURCE_DIR}/cmake/")
 
 # Compression library dependencies
-include("${CMAKE_VENDOR_DIR}/fastpfor.cmake")
-include("${CMAKE_VENDOR_DIR}/fsst.cmake")
-include("${CMAKE_VENDOR_DIR}/croaring.cmake")
-include("${CMAKE_VENDOR_DIR}/dynamic_bitset.cmake")
+include("cmake/fastpfor.cmake")
+include("cmake/fsst.cmake")
+include("cmake/croaring.cmake")
+include("cmake/dynamic_bitset.cmake")
 
 # TODO(open-sourcing) dependencies I'd like to remove from the core library
-include("${CMAKE_VENDOR_DIR}/tbb.cmake")
-include("${CMAKE_VENDOR_DIR}/gflags.cmake")
-include("${CMAKE_VENDOR_DIR}/spdlog.cmake")
-include("${CMAKE_VENDOR_DIR}/yaml-cpp.cmake")
-include("${CMAKE_VENDOR_DIR}/csv-parser.cmake")
+include("cmake/tbb.cmake")
+include("cmake/gflags.cmake")
+include("cmake/spdlog.cmake")
+include("cmake/yaml-cpp.cmake")
+include("cmake/csv-parser.cmake")
 
 # Test dependencies
-include("${CMAKE_VENDOR_DIR}/googletest.cmake")
+include("cmake/googletest.cmake")
 
 # Benchmark dependencies
-include("${CMAKE_VENDOR_DIR}/aws-sdk.cmake")
-include("${CMAKE_VENDOR_DIR}/benchmark.cmake")
-include("${CMAKE_VENDOR_DIR}/gdouble.cmake")
-include("${CMAKE_VENDOR_DIR}/turbo.cmake")
-include("${CMAKE_VENDOR_DIR}/lz4.cmake")
+include("cmake/aws-sdk.cmake")
+include("cmake/benchmark.cmake")
+include("cmake/gdouble.cmake")
+include("cmake/turbo.cmake")
+include("cmake/lz4.cmake")
 
 # ---------------------------------------------------------------------------
 # Components
 # ---------------------------------------------------------------------------
 
-include("${CMAKE_SOURCE_DIR}/btrblocks/local.cmake")  # btrblocks library
-include("${CMAKE_SOURCE_DIR}/btrfiles/local.cmake")   # btrblocks files library
-include("${CMAKE_SOURCE_DIR}/test/local.cmake")       # btrblocks tests
-include("${CMAKE_SOURCE_DIR}/bench/local.cmake")      # btrblocks tests
-include("${CMAKE_SOURCE_DIR}/tools/local.cmake")      # btrblocks tooling
+include("btrblocks/local.cmake")  # btrblocks library
+include("btrfiles/local.cmake")   # btrblocks files library
+include("test/local.cmake")       # btrblocks tests
+include("bench/local.cmake")      # btrblocks tests
+include("tools/local.cmake")      # btrblocks tooling
 
 # ---------------------------------------------------------------------------
 # Linting
@@ -82,25 +82,6 @@ if (NOT "${lint_targets}" STREQUAL "")
   add_custom_target(lint)
   add_dependencies(lint ${lint_targets})
 endif()
-
-# ---------------------------------------------------------------------------
-# INSTALL
-# ---------------------------------------------------------------------------
-include(GNUInstallDirs)
-install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksTargets.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
-)
-
-include(CMakePackageConfigHelpers)
-# generate the config file that includes the exports
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/BtrBlocksConfig.cmake"
-        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/btrblocks
-        NO_SET_AND_CHECK_MACRO
-        NO_CHECK_REQUIRED_COMPONENTS_MACRO
-)
 # ---------------------------------------------------------------------------
 # Print Configuration
 # ---------------------------------------------------------------------------
