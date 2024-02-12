@@ -71,16 +71,13 @@ int main(int argc,char** argv) {
       }
    }
 
-   std::string input;
-   std::getline(std::cin, input);
-
-
    size_t compr_size = n / rle;
    uint32_t* keys = reinterpret_cast<uint32_t*>(malloc(compr_size * sizeof(uint32_t)));
    uint32_t* values = reinterpret_cast<uint32_t*>(malloc(compr_size * sizeof(uint32_t)));
 
+#if !defined(WRITE_ONLY)
+
    {
-      double start = gettime();
       for (uint64_t i=0; i!=compr_size; i++) {
          keys[i] = 1;
          values[i] = 2;
@@ -107,6 +104,7 @@ int main(int argc,char** argv) {
 
       re.setParam("throughput (GB/s)", ((sizeof(uint32_t)*2*compr_size)/(1024.00*1024*1024))/(gettime()-start));
    }
+#endif
 
    #ifdef USE_MMAP
    if (munmap(keys, compr_size * sizeof(uint32_t)))
