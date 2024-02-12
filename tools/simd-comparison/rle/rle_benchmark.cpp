@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
   PerfEvent e;
 
   // std::vector<uint64_t > datasetSizes = {(1 << 24), (static_cast<uint64_t>(1) << static_cast<uint64_t>(31))};
-  std::vector<uint64_t > datasetSizes = {(static_cast<uint64_t>(1) << static_cast<uint64_t>(31))};
+  std::vector<uint64_t > datasetSizes = {(static_cast<uint64_t>(1) << static_cast<uint64_t>(33))};
 
   for (auto& datasetSize : datasetSizes) {
     uint64_t tuple_cout = datasetSize / 4;
