@@ -86,8 +86,8 @@ using namespace btrblocks_simd_comparison;
 int main(int argc, char** argv) {
   PerfEvent e;
 
-  // std::vector<uint64_t > datasetSizes = {(1 << 24), (static_cast<uint64_t>(1) << static_cast<uint64_t>(31))};
-  std::vector<uint64_t > datasetSizes = {(static_cast<uint64_t>(1) << static_cast<uint64_t>(33))};
+  std::vector<uint64_t > datasetSizes = {(1 << 24), (static_cast<uint64_t>(1) << static_cast<uint64_t>(33))};
+  // std::vector<uint64_t > datasetSizes = {(static_cast<uint64_t>(1) << static_cast<uint64_t>(33))};
 
   for (auto& datasetSize : datasetSizes) {
     uint64_t tuple_cout = datasetSize / 4;
@@ -113,26 +113,26 @@ int main(int argc, char** argv) {
 #endif
       e.setParam("scheme", "naive");
       RleBench<naive_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
-      std::getline(std::cin, input);
+      // std::getline(std::cin, input);
 #if defined(__GNUC__)
       e.setParam("scheme", "comp_intrin_128");
       RleBench<compintrin_rle_decompression<INTEGER, 4>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
-      std::getline(std::cin, input);
+      // std::getline(std::cin, input);
 #if defined(__AVX2__)
       e.setParam("scheme", "comp_intrin_256");
       RleBench<compintrin_rle_decompression<INTEGER, 8>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
-      std::getline(std::cin, input);
+      // std::getline(std::cin, input);
       e.setParam("scheme", "avx2");
       RleBench<avx2_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
-      std::getline(std::cin, input);
+      // std::getline(std::cin, input);
 #endif
 #if defined(__AVX512VL__)
       e.setParam("scheme", "comp_intrin_512");
       RleBench<compintrin_rle_decompression<INTEGER, 16>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
-      std::getline(std::cin, input);
+      // std::getline(std::cin, input);
       e.setParam("scheme", "avx512");
       RleBench<avx512_rle_decompression<INTEGER>>().measure(in, dest, out, tuple_cout, NUM_ITERATIONS, e);
-      std::getline(std::cin, input);
+      // std::getline(std::cin, input);
 #endif
 #if defined(__ARM_NEON)
       e.setParam("scheme", "neon");
