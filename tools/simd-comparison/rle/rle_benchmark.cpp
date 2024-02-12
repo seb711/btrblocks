@@ -21,7 +21,7 @@ namespace btrblocks_simd_comparison {
 // - we need a loop for benching all different architectures
 // - we need different sizes of datasets
 
-static constexpr uint64_t NUM_ITERATIONS = 100;
+static constexpr uint64_t NUM_ITERATIONS = 20;
 static constexpr uint64_t NUM_UNIQUE = 1024;
 
 template <typename DecompressFn>
