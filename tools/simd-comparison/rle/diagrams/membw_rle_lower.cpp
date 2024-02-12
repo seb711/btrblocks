@@ -71,6 +71,9 @@ int main(int argc,char** argv) {
       }
    }
 
+   std::string input;
+   std::getline(std::cin, input);
+
 
    size_t compr_size = n / rle;
    uint32_t* keys = reinterpret_cast<uint32_t*>(malloc(compr_size * sizeof(uint32_t)));
