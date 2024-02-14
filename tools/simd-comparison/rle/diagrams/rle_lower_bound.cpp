@@ -58,6 +58,7 @@ int main(int argc,char** argv) {
        uint64_t result = 0;
        uint64_t pos = 0;
        e.setParam("repeat", j);
+       double start = gettime();
 
        {
          PerfEventBlock b(e, compr_size);
@@ -70,6 +71,8 @@ int main(int argc,char** argv) {
              target[pos++] = result;
            }
          }
+
+         e.setParam("duration", (gettime()-start));
        }
      }
 
