@@ -24,6 +24,12 @@ namespace btrblocks_simd_comparison {
 static constexpr uint64_t NUM_ITERATIONS = 20;
 static constexpr uint64_t NUM_UNIQUE = 1024;
 
+void *malloc_aligned(size_t size, size_t alignment)
+{
+  size = ((size - 1) / alignment + 1) * alignment;
+  return memalign(alignment, size);
+}
+
 template <typename DecompressFn>
 class RleBench {
  protected:
@@ -35,7 +41,7 @@ class RleBench {
   void measure(INTEGER* in,
                RLEStructure<INTEGER>* dest,
                INTEGER* out,
-               int64_t tuple_count,
+               size_t tuple_count,
                size_t iterations,
                PerfEvent& event) {
     // results
@@ -46,11 +52,14 @@ class RleBench {
         PerfEventBlock b(event, dest->runs_count);
         rle_.decompress(out, nullptr, dest, tuple_count, 0);
       }
+      if (!_verify(in, out, tuple_count)) {
+        throw;
+      }
     }
   }
 
-  bool _verify(std::vector<INTEGER>& in, std::vector<INTEGER>& out) {
-    for (size_t i = 0; i < in.size(); ++i) {
+  bool _verify(const INTEGER* in, INTEGER* out, size_t tuple_count) {
+    for (size_t i = 0; i < tuple_count; ++i) {
       if (in[i] != out[i]) {
         return false;
       }
@@ -68,11 +77,11 @@ void generate_dataset(INTEGER* output,
   tbb::parallel_for(tbb::blocked_range<size_t>(0, dataset_size), [&](tbb::blocked_range<size_t> r) {
     size_t start = r.begin() - (r.begin() % dataset_runlength);
 
-    for (size_t i = start; i < r.end() - dataset_runlength; ++i) {
+    for (size_t i = start; i < r.end() - dataset_runlength;) {
       auto number = static_cast<INTEGER>(gen() % NUM_UNIQUE);
 
-      for (auto j = 0u; j != dataset_runlength; ++j, i++) {
-        output[i] = number;
+      for (auto j = 0u; j < dataset_runlength; ++j) {
+        output[i++] = number;
       }
     }
   });
@@ -90,16 +99,17 @@ int main(int argc, char** argv) {
   // std::vector<uint64_t > datasetSizes = {(static_cast<uint64_t>(1) << static_cast<uint64_t>(33))};
 
   for (auto& datasetSize : datasetSizes) {
-    uint64_t tuple_cout = datasetSize / 4;
+    uint64_t tuple_cout = datasetSize / sizeof(INTEGER);
     // reserve here the correct space
-    auto* in = new INTEGER[tuple_cout];
-    auto* out = new INTEGER[tuple_cout + SIMD_EXTRA_ELEMENTS(INTEGER)];
+    auto* in = (INTEGER*) malloc_aligned(tuple_cout * sizeof(INTEGER), 32);
+    auto* out = (INTEGER*) malloc_aligned((tuple_cout + SIMD_EXTRA_ELEMENTS(INTEGER)) * sizeof(INTEGER), 32);
     auto* dest = new RLEStructure<INTEGER>();
-    dest->data = new INTEGER[tuple_cout * 2];
+
+    dest->data = (INTEGER*) malloc_aligned(tuple_cout * 2 * sizeof(INTEGER), 32);
 
     e.setParam("item_size", tuple_cout);
 
-    for (size_t r = 5; r < 8; r++) {
+    for (size_t r = 6; r < 8; r++) {
       // used to pause the control flow
       std::string input;
       e.setParam("runlength", 2 << r);
@@ -151,9 +161,9 @@ int main(int argc, char** argv) {
 
 
     // delete allocated space
-    delete[] in;
-    delete[] out;
-    delete[] dest->data;
+    free(in);
+    free(out);
+    free(dest->data);
     delete dest;
   }
 }

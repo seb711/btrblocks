@@ -10,6 +10,8 @@
 #include <sys/mman.h>
 #include <sys/wait.h>
 #include <random>
+#include <malloc.h>
+#include <immintrin.h>
 
 constexpr bool huge = true; 
 
@@ -19,6 +21,14 @@ static double gettime(void) {
    return ((double)now_tv.tv_sec) + ((double)now_tv.tv_usec)/1000000.0;
 }
 
+#ifdef USE_NON_TEMPORAL
+const size_t alignment = 32;
+void *malloc(size_t size)
+{
+  size = ((size - 1) / alignment + 1) * alignment;
+  return memalign(alignment, size);
+}
+#endif
 
 int main(int argc,char** argv) {
    if (argc < 2) {
@@ -60,6 +70,8 @@ int main(int argc,char** argv) {
        e.setParam("repeat", j);
        double start = gettime();
 
+       uint32_t* write_ptr = target;
+
        {
          PerfEventBlock b(e, compr_size);
 
@@ -67,9 +79,26 @@ int main(int argc,char** argv) {
            result ^= keys[i];
            result ^= values[i];
 
-           for (uint64_t y = 0; y != rle; y++) {
-             target[pos++] = result;
+           uint32_t* target_ptr = write_ptr + rle;
+
+          #if defined(__AVX2__) && defined(USE_NON_TEMPORAL)
+           __m256i vec = _mm256_set1_epi32(result);
+           while ((uintptr_t) write_ptr % 32 && write_ptr < target_ptr) {
+             *(write_ptr++) = result;
            }
+
+           while (write_ptr < target_ptr) {
+             // store is performed in a single cycle
+             assert(write_ptr < target_ptr);
+             assert(((uintptr_t)write_ptr % 32) == 0);
+             _mm256_stream_si256(reinterpret_cast<__m256i*>(write_ptr), vec);
+             write_ptr += 8;
+           }
+            #else
+            for (uint64_t y = 0; y != rle; y++) {
+              target[pos++] = result;
+            }
+            #endif
          }
 
          e.setParam("duration", (gettime()-start));

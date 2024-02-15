@@ -48,9 +48,16 @@ struct avx2_rle_decompression<INTEGER> {
        */
       // set is a sequential operation
       __m256i vec = _mm256_set1_epi32(values[run_i]);
+
+      // make the alignment correct
+      while ((uintptr_t) write_ptr % 32 && write_ptr < target_ptr) {
+        *(write_ptr++) = values[run_i];
+      }
+
       while (write_ptr < target_ptr) {
         // store is performed in a single cycle
-        _mm256_storeu_si256(reinterpret_cast<__m256i*>(write_ptr), vec);
+        // non temporal memory is used
+        _mm256_stream_si256(reinterpret_cast<__m256i*>(write_ptr), vec);
         write_ptr += 8;
       }
       write_ptr = target_ptr;
