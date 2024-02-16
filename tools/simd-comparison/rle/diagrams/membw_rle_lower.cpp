@@ -10,6 +10,10 @@
 #include <sys/mman.h>
 #include <sys/wait.h>
 
+#if defined(__AVX2__)
+#include <immintrin.h>
+#endif
+
 constexpr bool huge = true; 
 
 static double gettime(void) {
@@ -22,8 +26,17 @@ static double gettime(void) {
 #error "mmap and new malloc every call doesnt work."
 #endif
 
+#ifdef USE_NON_TEMPORAL
+const alignment = 32;
+void *malloc(size_t size)
+{
+  size = ((size - 1) / 32 + 1) * 32;
+  return memalign(32, size);
+}
+#endif
+
 #ifdef USE_MMAP
-static void* mmap_malloc(size_t size) {
+static void* malloc(size_t size) {
    void* p =
          ::mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
    if constexpr (huge) { ::madvise(p, size, MADV_HUGEPAGE); }
