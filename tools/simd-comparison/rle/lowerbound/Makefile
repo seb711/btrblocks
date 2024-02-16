@@ -41,6 +41,7 @@ run_l3_n: $(TARGET_PLAIN) $(TARGET_NON_TEMPORAL)
 	@sudo ./$(TARGET_NON_TEMPORAL) $(N_DYNAMIC) $(RLE) $(ITERATIONS) $(REPS) $(FACTOR) > data/l3nt.csv
 
 run_all:
+	mkdir -p data
 	@sudo $(MAKE) run_plain
 	@sudo $(MAKE) run_non_temporal
 	@sudo $(MAKE) run_l3_n
