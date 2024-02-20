@@ -80,9 +80,9 @@ int main(int argc, char** argv) {
           result ^= keys[i];
           result ^= values[i];
 
-          uint32_t* target_ptr = write_ptr + rle;
 
 #if defined(__AVX2__) && defined(USE_NON_TEMPORAL)
+          uint32_t* target_ptr = write_ptr + rle;
           __m256i vec = _mm256_set1_epi32(result);
           while ((uintptr_t)write_ptr % 32 && write_ptr < target_ptr) {
             *(write_ptr++) = result;
@@ -90,7 +90,6 @@ int main(int argc, char** argv) {
 
           while (write_ptr < target_ptr) {
             // store is performed in a single cycle
-            assert(write_ptr < target_ptr);
             assert(((uintptr_t)write_ptr % 32) == 0);
             _mm256_stream_si256(reinterpret_cast<__m256i*>(write_ptr), vec);
             write_ptr += 8;
@@ -101,8 +100,15 @@ int main(int argc, char** argv) {
           }
 #endif
         }
-
         e.setParam("duration", (gettime() - start));
+        double startRead = gettime();
+
+        uint64_t checkResult = 0;
+        for (uint64_t i = 0; i != n; i++) {
+          checkResult ^= target[i];
+        }
+        e.setParam("checkResult", checkResult);
+        e.setParam("durationRead", (gettime() - startRead));
       }
     }
 

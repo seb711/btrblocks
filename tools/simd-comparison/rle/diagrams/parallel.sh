@@ -2,7 +2,7 @@
 
 # Define the script or command to run
 SCRIPT="./membw"
-ARGUMENTS="536870912 64 200"
+ARGUMENTS="]]]]]"
 
 # Get the number of CPU cores
 NUM_SOCKETS=2

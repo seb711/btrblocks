@@ -34,7 +34,7 @@ run_non_temporal: $(TARGET_NON_TEMPORAL)
 
 # Run with dynamic N based on L3 cache size
 run_l3_n: $(TARGET_PLAIN) $(TARGET_NON_TEMPORAL)
-	@$(eval N_DYNAMIC := $(shell echo $$((`cat /sys/devices/system/cpu/cpu0/cache/index3/size | grep -o '[0-9]\+'` * 1024/ 4))))
+	@$(eval N_DYNAMIC := $(shell echo $$((`cat /sys/devices/system/cpu/cpu0/cache/index3/size | grep -o '[0-9]\+'` * 1024 / 4 / 6))))
 	@$(eval FACTOR := $(shell echo "scale=2; $(N) / $(N_DYNAMIC)" | bc))
 	@echo "Running with N_DYNAMIC=$(N_DYNAMIC), FACTOR=$(FACTOR)"
 	@sudo ./$(TARGET_PLAIN) $(N_DYNAMIC) $(RLE) $(ITERATIONS) $(REPS) $(FACTOR) > data/l3.csv
