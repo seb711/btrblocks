@@ -5,8 +5,8 @@
 #include <tbb/parallel_for_each.h>
 // -------------------------------------------------------------------------------------
 #include "gflags/gflags.h"
-#include "tbb/global_control.h"
 #include "tbb/parallel_for.h"
+#include "tbb/task_scheduler_init.h"
 // #include "tbb/task_scheduler_init.h"
 // -------------------------------------------------------------------------------------
 #include "common/PerfEvent.hpp"
@@ -21,8 +21,8 @@ DEFINE_string(typefilter, "", "Only measure columns with given type");
 //DEFINE_int32(chunk, -1, "Select a specific chunk to measure");
 DEFINE_uint32(reps, 1, "Loop reps times");
 DEFINE_bool(perfevent, false, "Profile with perf event if true");
-DEFINE_bool(output_summary, false, "Output a summary of total speed and size");
-DEFINE_bool(output_columns, true, "Output speeds and sizes for single columns");
+DEFINE_bool(output_summary, true, "Output a summary of total speed and size");
+DEFINE_bool(output_columns, false, "Output speeds and sizes for single columns");
 DEFINE_bool(print_simd_debug, false, "Print SIMD usage debug information");
 // -------------------------------------------------------------------------------------
 using namespace btrblocks;
@@ -108,9 +108,8 @@ int main(int argc, char **argv) {
         threads = -1;
     } else {
         threads = FLAGS_threads;
-      tbb::global_control global_limit(tbb::global_control::max_allowed_parallelism, threads);
     }
-    // tbb::task_scheduler_init init(threads);
+    tbb::task_scheduler_init init(threads);
 
     // Read the metadata
     std::vector<char> raw_file_metadata;
@@ -231,7 +230,7 @@ int main(int argc, char **argv) {
         double s = average_runtime / (1000.0 * 1000.0);
         double mbs = mb / s;
 
-        std::cout << std::to_string(total_runtime) << " " << total_compressed_size << '\n';
+        std::cout << std::to_string(total_runtime) << ", " << total_compressed_size << '\n';
 
         /* std::cout << "Total:"
                   << " " << total_compressed_size << " Bytes"
