@@ -78,6 +78,8 @@ int main(int argc, char **argv)
     tbb::global_control c(tbb::global_control::max_allowed_parallelism,
                           std::thread::hardware_concurrency());
 
+    std::cout <<  std::thread::hardware_concurrency() << std::endl;
+
     // Load schema
     const auto schema = YAML::LoadFile(FLAGS_yaml);
 
