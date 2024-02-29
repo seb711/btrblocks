@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 
         std::vector<InputChunk> input_chunks;
         std::string path_prefix = FLAGS_btr + "/" + "column" + std::to_string(column_i) + "_part";
-        spdlog::info("compress for " + path_prefix " " + relation.columns[column_i].name);
+        spdlog::info("compress for " + path_prefix + " " + relation.columns[column_i].name);
 
         ColumnPart part;
         for (SIZE chunk_i = 0; chunk_i < ranges.size(); chunk_i++) {
@@ -192,7 +192,7 @@ int main(int argc, char **argv)
             part.addCompressedChunk(std::move(data));
         }
 
-        spdlog::info("compress for " + path_prefix " " + relation.columns[column_i].name + " finished");
+        spdlog::info("compress for " + path_prefix + " " + relation.columns[column_i].name + " finished");
 
 
         if (!part.chunks.empty()) {
