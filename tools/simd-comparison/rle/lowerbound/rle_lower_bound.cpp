@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
 
         uint64_t checkResult = 0;
         for (uint64_t i = 0; i != n; i++) {
-          checkResult ^= target[i];
+          checkResult += target[i];
         }
         e.setParam("checkResult", checkResult);
         e.setParam("durationRead", (gettime() - startRead));
