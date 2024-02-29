@@ -76,7 +76,8 @@ int main(int argc, char **argv)
     // Init TBB TODO: is that actually still necessary ?
     // tbb::task_scheduler_init init(FLAGS_threads);
     tbb::global_control c(tbb::global_control::max_allowed_parallelism,
-                          std::thread::hardware_concurrency());
+                          1);
+       //                   std::thread::hardware_concurrency());
 
     std::cout <<  std::thread::hardware_concurrency() << std::endl;
 
@@ -157,7 +158,6 @@ int main(int argc, char **argv)
 
     spdlog::info("run datablockV2 for " + FLAGS_btr);
 
-
     auto start_time = std::chrono::steady_clock::now();
     tbb::parallel_for(SIZE(0), relation.columns.size(), [&](SIZE column_i) {
         types[column_i] = relation.columns[column_i].type;
@@ -170,6 +170,8 @@ int main(int argc, char **argv)
 
         std::vector<InputChunk> input_chunks;
         std::string path_prefix = FLAGS_btr + "/" + "column" + std::to_string(column_i) + "_part";
+        spdlog::info("compress for " + path_prefix);
+
         ColumnPart part;
         for (SIZE chunk_i = 0; chunk_i < ranges.size(); chunk_i++) {
             if (FLAGS_chunk != -1 && FLAGS_chunk != chunk_i) {
@@ -192,6 +194,7 @@ int main(int argc, char **argv)
         }
 
         if (!part.chunks.empty()) {
+            spdlog::info("part.chunks.empty()");
             std::string filename = path_prefix + std::to_string(part_counters[column_i]);
             sizes_compressed[column_i] += part.writeToDisk(filename);
             part_counters[column_i]++;
@@ -199,6 +202,8 @@ int main(int argc, char **argv)
             input_chunks.clear();
         }
     });
+
+    spdlog::info("finished datablockV2 for " + FLAGS_btr);
 
     Datablock::writeMetadata(FLAGS_btr + "/metadata", types, part_counters, ranges.size());
     std::ofstream stats_stream(FLAGS_stats);
