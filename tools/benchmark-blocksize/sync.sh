@@ -3,6 +3,7 @@
 # Function to read CSV file and sync URIs
 sync_uris() {
   input_file="$1"
+  output_file="$2"
   index=1
 
   while IFS=',' read -r _ uri yaml; do
@@ -16,6 +17,7 @@ sync_uris() {
     if [[ ! -f "./csvtobtrdata/raw_data/$index/$filename" ]]; then
       mkdir ./csvtobtrdata/raw_data/$index -p
       aws s3 cp $uri ./csvtobtrdata/raw_data/$index/ --no-sign
+      sed -i "s/\"//g" ./csvtobtrdata/raw_data/$index/$filename
     fi
 
     if [[ ! -f "./csvtobtrdata/raw_data/$index/$schemaname" ]]; then
@@ -24,10 +26,10 @@ sync_uris() {
 
     bin_dir="./csvtobtrdata/btrblocks_bin/$index/"
     btr_dir="./csvtobtrdata/btrblocks/$index/"
-    mkdir -p "bin_dir" || rm -rf "bin_dir"/*
-    mkdir -p "btr_dir" || rm -rf "btr_dir"/*
-    ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/$index/$schemaname --csv ./csvtobtrdata/$index/$filename --create_binary true --create_btr true
-    echo "$filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> results.csv
+    mkdir -p "$bin_dir" || rm -rf "$bin_dir"/*
+    mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
+    ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary true --create_btr true
+    echo "$filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
 
     ((index++))
 
@@ -40,7 +42,7 @@ if ! command -v aws &> /dev/null; then
 fi
 
 # Check if uris.csv exists
-if [[ ! -f "../tools/benchmark-blocksize/data-fetch/datasetssmall.csv" ]]; then
+if [[ ! -f "./datasets.csv" ]]; then
   echo "datasets.csv file not found."
   exit 1
 fi
@@ -49,11 +51,19 @@ fi
 sudo apt-get install libthrift-dev libbrotli-dev libboost-all-dev libsnappy-dev libssl-dev libcurl4-openssl-dev -y
 
 # build the benchmark thing
-make -j4 csvtobtr
-make -j4 decompression-speed
+mkdir tmpbuild
+cd tmpbuild
+for chunksize in {12..16}
+do
+  echo "BUILDING FOR CHUNKSIZE $chunksize"
+  output_file="results_$chunksize.csv"
+  cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
+  make -j4 csvtobtr
+  make -j4 decompression-speed
 
-rm "results.txt"
+  rm $output_file
 
-# Sync URIs from the CSV file
-# sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
-sync_uris "../tools/benchmark-blocksize/data-fetch/datasetssmall.csv"
+  # Sync URIs from the CSV file
+  # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
+  sync_uris "../datasets.csv" $output_file
+done

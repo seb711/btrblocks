@@ -13,6 +13,8 @@ option(WITH_LOGGING "WITH_LOGGING" OFF)
 option(SAMPLING_TEST_MODE "SAMPLING_TEST_MODE" OFF)
 option(ENABLE_FOR_SCHEME "ENABLE_FOR_SCHEME" OFF)
 option(BUILD_SHARED_LIBRARY "BUILD_SHARED_LIBRARY" OFF)
+option(BLOCKSIZE "BLOCKSIZE" 16)
+option(PARTSIZE "PARTSIZE" 16)
 
 # -------------------------------------------------------------------------------
 # C++ build options
@@ -100,6 +102,7 @@ message(STATUS "    WITH_LOGGING                = ${WITH_LOGGING}")
 message(STATUS "    SAMPLING_TEST_MODE          = ${SAMPLING_TEST_MODE}")
 message(STATUS "    ENABLE_FOR_SCHEME           = ${ENABLE_FOR_SCHEME}")
 message(STATUS "    BUILD_SHARED_LIBRARY        = ${BUILD_SHARED_LIBRARY}")
+message(STATUS "    BLOCKSIZE                   = ${BLOCKSIZE}")
 message(STATUS "[test] settings")
 message(STATUS "    GTEST_INCLUDE_DIR           = ${GTEST_INCLUDE_DIR}")
 message(STATUS "    GTEST_LIBRARY_PATH          = ${GTEST_LIBRARY_PATH}")

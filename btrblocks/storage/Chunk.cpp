@@ -8,8 +8,9 @@
 #include <fstream>
 #include <iomanip>
 #include <memory>
+
 // -------------------------------------------------------------------------------------
-constexpr uint32_t chunk_part_size_threshold = 16 * 1024 * 1024;
+constexpr uint32_t chunk_part_size_threshold = PARTSIZE * 1024 * 1024;
 // -------------------------------------------------------------------------------------
 namespace btrblocks {
 // -------------------------------------------------------------------------------------
@@ -232,6 +233,7 @@ bool InputChunk::compareContents(u8* their_data,
 
 bool ColumnPart::canAdd(SIZE chunk_size) {
   if (chunk_size > chunk_part_size_threshold) {
+    std::cout << chunk_size << ", "  << chunk_part_size_threshold << std::endl;
     // This may appear in practice, but we ignore the problem for now.
     // Although writing will work, reading the data back in may break, as we
     // assume objects to always have a maximum size of part_size_threshold.

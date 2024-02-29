@@ -15,7 +15,6 @@
 #include <yaml-cpp/yaml.h>
 #include <spdlog/spdlog.h>
 #include <tbb/parallel_for.h>
-#include <tbb/task_scheduler_init.h>
 // ------------------------------------------------------------------------------
 // Btr internal includes
 #include "common/Utils.hpp"
@@ -73,7 +72,7 @@ int main(int argc, char **argv)
     SchemePool::refresh();
 
     // Init TBB TODO: is that actually still necessary ?
-    tbb::task_scheduler_init init(FLAGS_threads);
+    // tbb::task_scheduler_init init(FLAGS_threads);
 
     // Load schema
     const auto schema = YAML::LoadFile(FLAGS_yaml);
@@ -165,7 +164,6 @@ int main(int argc, char **argv)
             auto input_chunk = relation.getInputChunk(ranges[chunk_i], chunk_i, column_i);
             std::vector<u8> data = Datablock::compress(input_chunk);
             sizes_uncompressed[column_i] += input_chunk.size;
-
             if (!part.canAdd(data.size())) {
                 std::string filename = path_prefix + std::to_string(part_counters[column_i]);
                 sizes_compressed[column_i] += part.writeToDisk(filename);

@@ -6,7 +6,6 @@
 // -------------------------------------------------------------------------------------
 #include "gflags/gflags.h"
 #include "tbb/parallel_for.h"
-#include "tbb/task_scheduler_init.h"
 // #include "tbb/task_scheduler_init.h"
 // -------------------------------------------------------------------------------------
 #include "common/PerfEvent.hpp"
@@ -109,7 +108,7 @@ int main(int argc, char **argv) {
     } else {
         threads = FLAGS_threads;
     }
-    tbb::task_scheduler_init init(threads);
+    // tbb::task_scheduler_init init(threads);
 
     // Read the metadata
     std::vector<char> raw_file_metadata;
@@ -230,7 +229,7 @@ int main(int argc, char **argv) {
         double s = average_runtime / (1000.0 * 1000.0);
         double mbs = mb / s;
 
-        std::cout << std::to_string(total_runtime) << ", " << total_compressed_size << '\n';
+        std::cout << std::to_string(average_runtime) << ", " << total_compressed_size << ", " << total_size << ", " << std::to_string((double)total_size / (double)total_compressed_size) << '\n';
 
         /* std::cout << "Total:"
                   << " " << total_compressed_size << " Bytes"
