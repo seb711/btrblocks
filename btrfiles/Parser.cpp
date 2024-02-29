@@ -173,8 +173,6 @@ void convertCSV(const string csv_path, const YAML::Node &schema, const string &o
                break;
             }
             case ColumnType::STRING: {
-              std::cout << "yea string write" << std::endl;
-
                output_column_file += ".string";
                writeBinary(output_column_file.c_str(), string_vectors[column_descriptor.vector_offset]);
                break;

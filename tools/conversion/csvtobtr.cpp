@@ -127,6 +127,9 @@ int main(int argc, char **argv)
     std::filesystem::path yaml_path = FLAGS_yaml;
     relation.name = yaml_path.stem();
 
+    spdlog::info("created relation for " + FLAGS_btr);
+
+
     // Prepare datastructures for btr compression
     //auto ranges = relation.getRanges(static_cast<SplitStrategy>(1), 9999);
     auto ranges = relation.getRanges(SplitStrategy::SEQUENTIAL, 9999);
@@ -136,6 +139,8 @@ int main(int argc, char **argv)
 //    if (!std::filesystem::create_directory(FLAGS_btr)) {
 //        throw Generic_Exception("Unable to create btr output directory");
 //    }
+
+    spdlog::info("created datablockV2 for " + FLAGS_btr);
 
     // These counter are for statistics that match the harbook.
     std::vector<std::atomic_size_t> sizes_uncompressed(relation.columns.size());
@@ -149,6 +154,10 @@ int main(int argc, char **argv)
     //      - for every column: total number of parts
     //      - for every column: name, type
     // TODO chunk flag
+
+    spdlog::info("run datablockV2 for " + FLAGS_btr);
+
+
     auto start_time = std::chrono::steady_clock::now();
     tbb::parallel_for(SIZE(0), relation.columns.size(), [&](SIZE column_i) {
         types[column_i] = relation.columns[column_i].type;
