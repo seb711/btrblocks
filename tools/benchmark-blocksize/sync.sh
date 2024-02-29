@@ -25,6 +25,8 @@ sync_uris() {
       aws s3 cp $yaml ./csvtobtrdata/raw_data/$index/ --no-sign
     fi
 
+    btr_dir="./csvtobtrdata/btrblocks/$index/"
+    mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
     bin_dir="./csvtobtrdata/btrblocks_bin/$index/"
     if [[ ! -d $bin_dir ]]; then
       ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary true --create_btr true
@@ -32,8 +34,6 @@ sync_uris() {
       ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary false --create_btr true
     fi
 
-    btr_dir="./csvtobtrdata/btrblocks/$index/"
-    mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
     echo "$factor, $filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
 
     ((index++))
