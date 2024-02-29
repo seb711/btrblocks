@@ -76,8 +76,7 @@ int main(int argc, char **argv)
     // Init TBB TODO: is that actually still necessary ?
     // tbb::task_scheduler_init init(FLAGS_threads);
     tbb::global_control c(tbb::global_control::max_allowed_parallelism,
-                          1);
-       //                   std::thread::hardware_concurrency());
+                        std::thread::hardware_concurrency());
 
     std::cout <<  std::thread::hardware_concurrency() << std::endl;
 
@@ -170,7 +169,7 @@ int main(int argc, char **argv)
 
         std::vector<InputChunk> input_chunks;
         std::string path_prefix = FLAGS_btr + "/" + "column" + std::to_string(column_i) + "_part";
-        spdlog::info("compress for " + relation.columns[20].name);
+        spdlog::info("compress for " + path_prefix " " + relation.columns[column_i].name);
 
         ColumnPart part;
         for (SIZE chunk_i = 0; chunk_i < ranges.size(); chunk_i++) {
@@ -192,6 +191,9 @@ int main(int argc, char **argv)
             input_chunks.push_back(std::move(input_chunk));
             part.addCompressedChunk(std::move(data));
         }
+
+        spdlog::info("compress for " + path_prefix " " + relation.columns[column_i].name + " finished");
+
 
         if (!part.chunks.empty()) {
             spdlog::info("part.chunks.empty()");
