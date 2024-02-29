@@ -6,6 +6,8 @@
 // -------------------------------------------------------------------------------------
 #include "gflags/gflags.h"
 #include "tbb/parallel_for.h"
+#include "tbb/global_control.h"
+
 // #include "tbb/task_scheduler_init.h"
 // -------------------------------------------------------------------------------------
 #include "common/PerfEvent.hpp"
@@ -107,6 +109,7 @@ int main(int argc, char **argv) {
         threads = -1;
     } else {
         threads = FLAGS_threads;
+        tbb::global_control::active_value(tbb::global_control::max_allowed_parallelism);
     }
     // tbb::task_scheduler_init init(threads);
 
