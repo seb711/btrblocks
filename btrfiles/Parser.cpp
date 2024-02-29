@@ -121,6 +121,7 @@ void convertCSV(const string csv_path, const YAML::Node &schema, const string &o
                      break;
                   }
                   case ColumnType::STRING: {
+                    std::cout << "yea string" << std::endl;
                      const bool is_set = (column_str == "null") ? 0 : 1;
                      column_descriptor.set_bitmap.push_back(is_set);
                      // -------------------------------------------------------------------------------------
@@ -173,6 +174,8 @@ void convertCSV(const string csv_path, const YAML::Node &schema, const string &o
                break;
             }
             case ColumnType::STRING: {
+              std::cout << "yea string write" << std::endl;
+
                output_column_file += ".string";
                writeBinary(output_column_file.c_str(), string_vectors[column_descriptor.vector_offset]);
                break;
