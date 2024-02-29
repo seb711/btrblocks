@@ -26,10 +26,14 @@ sync_uris() {
     fi
 
     bin_dir="./csvtobtrdata/btrblocks_bin/$index/"
+    if [[ ! -d $bin_dir ]]; then
+      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary true --create_btr true
+    else
+      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary false --create_btr true
+    fi
+
     btr_dir="./csvtobtrdata/btrblocks/$index/"
-    mkdir -p "$bin_dir" || rm -rf "$bin_dir"/*
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
-    ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary true --create_btr true
     echo "$factor, $filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
 
     ((index++))
