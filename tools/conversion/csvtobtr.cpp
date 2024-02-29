@@ -12,9 +12,10 @@
 // ------------------------------------------------------------------------------
 // External libs
 #include <gflags/gflags.h>
-#include <yaml-cpp/yaml.h>
 #include <spdlog/spdlog.h>
 #include <tbb/parallel_for.h>
+#include <yaml-cpp/yaml.h>
+#include <thread>
 #include "tbb/global_control.h"
 // ------------------------------------------------------------------------------
 // Btr internal includes
@@ -74,7 +75,8 @@ int main(int argc, char **argv)
 
     // Init TBB TODO: is that actually still necessary ?
     // tbb::task_scheduler_init init(FLAGS_threads);
-    tbb::global_control::active_value(tbb::global_control::max_allowed_parallelism);
+    tbb::global_control c(tbb::global_control::max_allowed_parallelism,
+                          std::thread::hardware_concurrency());
 
     // Load schema
     const auto schema = YAML::LoadFile(FLAGS_yaml);

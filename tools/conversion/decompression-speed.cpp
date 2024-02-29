@@ -1,8 +1,9 @@
 // -------------------------------------------------------------------------------------
+#include <tbb/parallel_for_each.h>
 #include <filesystem>
 #include <fstream>
 #include <random>
-#include <tbb/parallel_for_each.h>
+#include <thread>
 // -------------------------------------------------------------------------------------
 #include "gflags/gflags.h"
 #include "tbb/parallel_for.h"
@@ -109,7 +110,8 @@ int main(int argc, char **argv) {
         threads = -1;
     } else {
         threads = FLAGS_threads;
-        tbb::global_control::active_value(tbb::global_control::max_allowed_parallelism);
+        tbb::global_control c(tbb::global_control::max_allowed_parallelism,
+                              std::thread::hardware_concurrency());
     }
     // tbb::task_scheduler_init init(threads);
 
