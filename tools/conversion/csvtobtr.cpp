@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     // Init TBB TODO: is that actually still necessary ?
     // tbb::task_scheduler_init init(FLAGS_threads);
     tbb::global_control c(tbb::global_control::max_allowed_parallelism,
-                        std::thread::hardware_concurrency());
+                        1);
 
     std::cout <<  std::thread::hardware_concurrency() << std::endl;
 
