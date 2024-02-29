@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 
         std::vector<InputChunk> input_chunks;
         std::string path_prefix = FLAGS_btr + "/" + "column" + std::to_string(column_i) + "_part";
-        spdlog::info("compress for " + path_prefix);
+        spdlog::info("compress for " + relation.columns[20].name);
 
         ColumnPart part;
         for (SIZE chunk_i = 0; chunk_i < ranges.size(); chunk_i++) {
