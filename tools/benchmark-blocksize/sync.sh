@@ -4,6 +4,7 @@
 sync_uris() {
   input_file="$1"
   output_file="$2"
+  factor="$3"
   index=1
 
   while IFS=',' read -r _ uri yaml; do
@@ -29,7 +30,7 @@ sync_uris() {
     mkdir -p "$bin_dir" || rm -rf "$bin_dir"/*
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
     ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary true --create_btr true
-    echo "$filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
+    echo "$factor, $filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
 
     ((index++))
 
@@ -51,12 +52,12 @@ fi
 sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 
 # build the benchmark thing
+output_file="results.csv"
 mkdir tmpbuild
 cd tmpbuild
 for chunksize in {12..16}
 do
   echo "BUILDING FOR CHUNKSIZE $chunksize"
-  output_file="results_$chunksize.csv"
   cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
   make -j4 csvtobtr
   make -j4 decompression-speed
@@ -65,5 +66,5 @@ do
 
   # Sync URIs from the CSV file
   # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
-  sync_uris "../datasets.csv" $output_file
+  sync_uris "../datasets.csv" $output_file $chunksize
 done
