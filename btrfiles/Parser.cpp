@@ -121,7 +121,6 @@ void convertCSV(const string csv_path, const YAML::Node &schema, const string &o
                      break;
                   }
                   case ColumnType::STRING: {
-                    std::cout << column_str << std::endl;
                      const bool is_set = (column_str == "null") ? 0 : 1;
                      column_descriptor.set_bitmap.push_back(is_set);
                      // -------------------------------------------------------------------------------------
