@@ -69,7 +69,6 @@ void convertCSV(const string csv_path, const YAML::Node &schema, const string &o
       u32 tuple_i = 0;
       //u32 column_count = parser.begin()->size();
       for ( auto &tuple : parser ) {
-        std::cout << tuple_i << std::endl;
 //         if(tuple.size() != column_count)  {
 //           cerr << " lines " << tuple_i << " in csv is corrupted"<< endl;
 //           cerr << tuple[tuple.size() - 1] << endl;
