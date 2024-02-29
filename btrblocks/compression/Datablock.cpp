@@ -104,7 +104,6 @@ SIZE Datablock::compress(const InputChunk& input_chunk, u8* output) {
       // Compression
       ThreadCache::get().compression_level++;
       const StringArrayViewer str_viewer(input_chunk.data.get());
-      std::cout << "string scheme " << std::to_string(static_cast<uint8_t>(preferred_scheme.schemeType())) << std::endl;
       u32 after_column_size =
           preferred_scheme.compress(str_viewer, input_chunk.nullmap.get(), output_data, stats);
       meta->nullmap_offset = after_column_size;
