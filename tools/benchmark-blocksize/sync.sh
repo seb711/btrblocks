@@ -48,7 +48,7 @@ if [[ ! -f "./datasets.csv" ]]; then
 fi
 
 # install things
-sudo apt-get install libthrift-dev libbrotli-dev libboost-all-dev libsnappy-dev libssl-dev libcurl4-openssl-dev -y
+sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 
 # build the benchmark thing
 mkdir tmpbuild
