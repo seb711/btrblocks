@@ -46,12 +46,6 @@ if ! command -v aws &> /dev/null; then
   exit 1
 fi
 
-# Check if uris.csv exists
-if [[ ! -f "./datasets.csv" ]]; then
-  echo "datasets.csv file not found."
-  exit 1
-fi
-
 # install things
 sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 
@@ -59,6 +53,14 @@ sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 output_file="results.csv"
 mkdir tmpbuild
 cd tmpbuild
+
+dataset="../datasetssmall.csv"
+# Check if uris.csv exists
+if [[ ! -f $dataset ]]; then
+  echo "datasets.csv file not found."
+  exit 1
+fi
+
 for chunksize in {12..16}
 do
   echo "BUILDING FOR CHUNKSIZE $chunksize"
@@ -70,5 +72,5 @@ do
 
   # Sync URIs from the CSV file
   # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
-  sync_uris "../datasets.csv" $output_file $chunksize
+  sync_uris $dataset $output_file $chunksize
 done

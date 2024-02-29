@@ -1,2 +1,2 @@
-Corporations_1, s3://public-bi-eu-central-1/csv/Corporations/Corporations_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/Corporations/1/Corporations_1.yaml
-Food_1, s3://public-bi-eu-central-1/csv/Food/Food_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/Food/1/Food_1.yaml
+RealEstate2_1, s3://public-bi-eu-central-1/csv/RealEstate2/RealEstate2_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/RealEstate2/1/RealEstate2_1.yaml
+
