@@ -64,7 +64,7 @@ enum class StringSchemeType : uint8_t {
 };
 using StringSchemeSet = SchemeSet<StringSchemeType>;
 constexpr StringSchemeSet defaultStringSchemes() {
-  return {StringSchemeType::UNCOMPRESSED, StringSchemeType::ONE_VALUE, StringSchemeType::DICT};
+  return {StringSchemeType::UNCOMPRESSED, StringSchemeType::ONE_VALUE};
 };
 // ------------------------------------------------------------------------------
 // When overriding schemes, pass this value to use automatic scheme selection.
