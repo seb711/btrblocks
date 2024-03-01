@@ -8,32 +8,24 @@ sync_uris() {
   index=1
 
   while IFS=',' read -r _ uri yaml; do
-    echo "aws s3 cp $uri ./$index"
-    echo "aws s3 cp $yaml ./$index"
-
-    filename=$(basename "$uri")
     schemaname=$(basename "$yaml")
 
+    echo $uri
 
-    if [[ ! -f "./csvtobtrdata/raw_data_small/$index/$filename" ]]; then
-      mkdir ./csvtobtrdata/raw_data_small/$index -p
-      aws s3 cp $uri ./csvtobtrdata/raw_data_small/$index/ --no-sign
-      sed -i "s/\"//g" ./csvtobtrdata/raw_data_small/$index/$filename
+    if [[ ! -f "./csvtobtrdata/yaml/$index/$schemaname" ]]; then
+      mkdir ./csvtobtrdata/yaml/$index -p
+      aws s3 cp $yaml ./csvtobtrdata/yaml/$index/ --no-sign
     fi
 
-    if [[ ! -f "./csvtobtrdata/raw_data_small/$index/$schemaname" ]]; then
-      aws s3 cp $yaml ./csvtobtrdata/raw_data_small/$index/ --no-sign
-    fi
-
-    btr_dir="./csvtobtrdata/btrblocks_small/$index/"
+    btr_dir="./csvtobtrdata/btrblocks/$index/"
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
-    bin_dir="./csvtobtrdata/btrblocks_bin_small/$index/"
+    bin_dir="./csvtobtrdata/btrblocks_bin/$index"
+    echo "aws s3 sync $uri $bin_dir"
     if [[ ! -d $bin_dir ]]; then
-      mkdir -p "$bin_dir"
-      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data_small/$index/$schemaname --csv ./csvtobtrdata/raw_data_small/$index/$filename --create_binary true --create_btr true
-    else
-      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data_small/$index/$schemaname --csv ./csvtobtrdata/raw_data_small/$index/$filename --create_btr true
+      aws s3 sync $uri $bin_dir --no-sign
     fi
+
+    ./csvtobtr --btr $btr_dir --binary $bin_dir --create_btr true --yaml "./csvtobtrdata/yaml/$index/$schemaname"
 
     echo "$factor, $filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
 
@@ -51,24 +43,24 @@ fi
 sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 
 # build the benchmark thing
-output_file="resultssmall.csv"
+output_file="results.csv"
 rm $output_file
 mkdir tmpbuild
 cd tmpbuild
 
-dataset="../datasetssmall.csv"
+dataset="../datasetsurismall.csv"
 # Check if uris.csv exists
 if [[ ! -f $dataset ]]; then
-  echo "datasets.csv file not found."
+  echo "datasetsurismall.csv file not found."
   exit 1
 fi
 
 for chunksize in {14..16}
 do
   echo "BUILDING FOR CHUNKSIZE $chunksize"
-  cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
-  make -j4 csvtobtr
-  make -j4 decompression-speed
+  # cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
+  # make -j6 csvtobtr
+  # make -j6 decompression-speed
   # Sync URIs from the CSV file
   # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
   sync_uris $dataset $output_file $chunksize
