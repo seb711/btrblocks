@@ -50,7 +50,7 @@ fi
 sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 
 # build the benchmark thing
-output_file="results.csv"
+output_file="resultssmall.csv"
 mkdir tmpbuild
 cd tmpbuild
 
