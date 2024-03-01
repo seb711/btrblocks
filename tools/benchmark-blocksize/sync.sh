@@ -15,23 +15,23 @@ sync_uris() {
     schemaname=$(basename "$yaml")
 
 
-    if [[ ! -f "./csvtobtrdata/raw_data/$index/$filename" ]]; then
-      mkdir ./csvtobtrdata/raw_data/$index -p
-      aws s3 cp $uri ./csvtobtrdata/raw_data/$index/ --no-sign
-      sed -i "s/\"//g" ./csvtobtrdata/raw_data/$index/$filename
+    if [[ ! -f "./csvtobtrdata/raw_data_small/$index/$filename" ]]; then
+      mkdir ./csvtobtrdata/raw_data_small/$index -p
+      aws s3 cp $uri ./csvtobtrdata/raw_data_small/$index/ --no-sign
+      sed -i "s/\"//g" ./csvtobtrdata/raw_data_small/$index/$filename
     fi
 
-    if [[ ! -f "./csvtobtrdata/raw_data/$index/$schemaname" ]]; then
+    if [[ ! -f "./csvtobtrdata/raw_data_small/$index/$schemaname" ]]; then
       aws s3 cp $yaml ./csvtobtrdata/raw_data/$index/ --no-sign
     fi
 
-    btr_dir="./csvtobtrdata/btrblocks/$index/"
+    btr_dir="./csvtobtrdata/btrblocks_small/$index/"
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
-    bin_dir="./csvtobtrdata/btrblocks_bin/$index/"
+    bin_dir="./csvtobtrdata/btrblocks_bin_small/$index/"
     if [[ ! -d $bin_dir ]]; then
-      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_binary true --create_btr true
+      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data_small/$index/$schemaname --csv ./csvtobtrdata/raw_data_small/$index/$filename --create_binary true --create_btr true
     else
-      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data/$index/$schemaname --csv ./csvtobtrdata/raw_data/$index/$filename --create_btr true
+      ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data_small/$index/$schemaname --csv ./csvtobtrdata/raw_data_small/$index/$filename --create_btr true
     fi
 
     echo "$factor, $filename, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
