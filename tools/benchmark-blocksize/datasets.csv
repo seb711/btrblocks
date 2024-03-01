@@ -37,7 +37,7 @@ NYC_1, s3://public-bi-eu-central-1/csv/NYC/NYC_1.csv, s3://public-bi-eu-central-
 USCensus_1, s3://public-bi-eu-central-1/csv/USCensus/USCensus_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/USCensus/1/USCensus_1.yaml
 Eixo_1, s3://public-bi-eu-central-1/csv/Eixo/Eixo_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/Eixo/1/Eixo_1.yaml
 Uberlandia_1, s3://public-bi-eu-central-1/csv/Uberlandia/Uberlandia_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/Uberlandia/1/Uberlandia_1.yaml
-MulheresMil_1, s3://public-bi-eu-central-1/csv/MulheresMil_1/MulheresMil_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/MulheresMil/1/MulheresMil_1.yaml
+MulheresMil_1, s3://public-bi-eu-central-1/csv/MulheresMil/MulheresMil_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/MulheresMil/1/MulheresMil_1.yaml
 Motos_1, s3://public-bi-eu-central-1/csv/Motos/Motos_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/Motos/1/Motos_1.yaml
 CommonGovernment_1, s3://public-bi-eu-central-1/csv/CommonGovernment/CommonGovernment_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/CommonGovernment/1/CommonGovernment_1.yaml
 Generico_1, s3://public-bi-eu-central-1/csv/Generico/Generico_1.csv,  s3://public-bi-eu-central-1/v0.0.1/metadata/Generico/1/Generico_1.yaml
