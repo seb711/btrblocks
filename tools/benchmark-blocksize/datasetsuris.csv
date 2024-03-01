@@ -6,7 +6,7 @@ CommonGovernment_1, s3://public-bi-eu-central-1/v0.0.1/binary/CommonGovernment_1
 Eixo_1, s3://public-bi-eu-central-1/v0.0.1/binary/Eixo_1/,  s3://public-bi-eu-central-1/v0.0.1/metadata/Eixo/1/Eixo_1.yaml
 Euro2016_1, s3://public-bi-eu-central-1/v0.0.1/binary/Euro2016_1/,  s3://public-bi-eu-central-1/v0.0.1/metadata/Euro2016/1/Euro2016_1.yaml
 Food_1, s3://public-bi-eu-central-1/v0.0.1/binary/Food_1/,  s3://public-bi-eu-central-1/v0.0.1/metadata/Food/1/Food_1.yaml
-Generico_1, s3://public-bi-eu-central-1/v0.0.1/binary/CommonGovernment_1/,   s3://public-bi-eu-central-1/v0.0.1/metadata/Generico/1/Generico_1.yaml
+Generico_1, s3://public-bi-eu-central-1/v0.0.1/binary/Generico_1/,   s3://public-bi-eu-central-1/v0.0.1/metadata/Generico/1/Generico_1.yaml
 Hatred_1, s3://public-bi-eu-central-1/v0.0.1/binary/Hatred_1/,  s3://public-bi-eu-central-1/v0.0.1/metadata/Hatred/1/Hatred_1.yaml
 IGlocations1_1, s3://public-bi-eu-central-1/v0.0.1/binary/IGlocations1_1/,  s3://public-bi-eu-central-1/v0.0.1/metadata/IGlocations1/1/IGlocations1_1.yaml
 IGlocations2_1, s3://public-bi-eu-central-1/v0.0.1/binary/IGlocations2_1/,  s3://public-bi-eu-central-1/v0.0.1/metadata/IGlocations2/1/IGlocations2_1.yaml
