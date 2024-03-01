@@ -29,6 +29,7 @@ sync_uris() {
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
     bin_dir="./csvtobtrdata/btrblocks_bin_small/$index/"
     if [[ ! -d $bin_dir ]]; then
+      mkdir -p "$bin_dir"
       ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data_small/$index/$schemaname --csv ./csvtobtrdata/raw_data_small/$index/$filename --create_binary true --create_btr true
     else
       ./csvtobtr --btr $btr_dir --binary $bin_dir --yaml ./csvtobtrdata/raw_data_small/$index/$schemaname --csv ./csvtobtrdata/raw_data_small/$index/$filename --create_btr true
@@ -74,3 +75,4 @@ do
   # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
   sync_uris $dataset $output_file $chunksize
 done
+
