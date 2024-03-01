@@ -7,25 +7,25 @@ sync_uris() {
   factor="$3"
   index=1
 
-  while IFS=',' read -r _ uri yaml; do
+  while IFS=',' read -r name uri yaml; do
     schemaname=$(basename "$yaml")
 
     echo $uri
 
-    if [[ ! -f "./csvtobtrdata/yaml/$index/$schemaname" ]]; then
-      mkdir ./csvtobtrdata/yaml/$index -p
-      aws s3 cp $yaml ./csvtobtrdata/yaml/$index/ --no-sign
+    if [[ ! -f "./csvtobtrdata/yaml/$name/$schemaname" ]]; then
+      mkdir ./csvtobtrdata/yaml/$name -p
+      aws s3 cp $yaml ./csvtobtrdata/yaml/$name/ --no-sign
     fi
 
-    btr_dir="./csvtobtrdata/btrblocks/$index/"
+    btr_dir="./csvtobtrdata/btrblocks/$name/"
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
-    bin_dir="./csvtobtrdata/btrblocks_bin/$index"
+    bin_dir="./csvtobtrdata/btrblocks_bin/$name"
     echo "aws s3 sync $uri $bin_dir"
     if [[ ! -d $bin_dir ]]; then
       aws s3 sync $uri $bin_dir --no-sign
     fi
 
-    ./csvtobtr --btr $btr_dir --binary $bin_dir --create_btr true --yaml "./csvtobtrdata/yaml/$index/$schemaname"
+    ./csvtobtr --btr $btr_dir --binary $bin_dir --create_btr true --yaml "./csvtobtrdata/yaml/$name/$schemaname"
 
     echo "$factor, $schemaname, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
 
