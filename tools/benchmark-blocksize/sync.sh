@@ -52,6 +52,7 @@ sudo apt-get install libssl-dev libcurl4-openssl-dev -y
 
 # build the benchmark thing
 output_file="resultssmall.csv"
+rm $output_file
 mkdir tmpbuild
 cd tmpbuild
 
@@ -68,9 +69,6 @@ do
   cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
   make -j4 csvtobtr
   make -j4 decompression-speed
-
-  rm $output_file
-
   # Sync URIs from the CSV file
   # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
   sync_uris $dataset $output_file $chunksize
