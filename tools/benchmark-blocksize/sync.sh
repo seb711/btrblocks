@@ -48,7 +48,7 @@ rm $output_file
 mkdir tmpbuild
 cd tmpbuild
 
-dataset="../datasetsurismall.csv"
+dataset="../datasetsuris.csv"
 # Check if uris.csv exists
 if [[ ! -f $dataset ]]; then
   echo "datasetsurismall.csv file not found."
@@ -58,9 +58,9 @@ fi
 for chunksize in {14..16}
 do
   echo "BUILDING FOR CHUNKSIZE $chunksize"
-  # cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
-  # make -j6 csvtobtr
-  # make -j6 decompression-speed
+  cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
+  make -j6 csvtobtr
+  make -j6 decompression-speed
   # Sync URIs from the CSV file
   # sync_uris "parquet_s3_files.csv" > "./decompression-output-$replacement.txt"
   sync_uris $dataset $output_file $chunksize
