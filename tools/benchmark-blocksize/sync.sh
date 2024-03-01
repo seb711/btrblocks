@@ -22,7 +22,7 @@ sync_uris() {
     fi
 
     if [[ ! -f "./csvtobtrdata/raw_data_small/$index/$schemaname" ]]; then
-      aws s3 cp $yaml ./csvtobtrdata/raw_data/$index/ --no-sign
+      aws s3 cp $yaml ./csvtobtrdata/raw_data_small/$index/ --no-sign
     fi
 
     btr_dir="./csvtobtrdata/btrblocks_small/$index/"
