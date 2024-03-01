@@ -78,8 +78,6 @@ int main(int argc, char **argv)
     tbb::global_control c(tbb::global_control::max_allowed_parallelism,
                         std::thread::hardware_concurrency());
 
-    std::cout <<  std::thread::hardware_concurrency() << std::endl;
-
     // Load schema
     const auto schema = YAML::LoadFile(FLAGS_yaml);
 
@@ -101,8 +99,6 @@ int main(int argc, char **argv)
     if (!FLAGS_create_btr) {
         return 0;
     }
-
-    spdlog::info("Creating btr files in " + FLAGS_btr);
 
 
     ColumnType typefilter;
@@ -127,9 +123,6 @@ int main(int argc, char **argv)
     std::filesystem::path yaml_path = FLAGS_yaml;
     relation.name = yaml_path.stem();
 
-    spdlog::info("created relation for " + FLAGS_btr);
-
-
     // Prepare datastructures for btr compression
     //auto ranges = relation.getRanges(static_cast<SplitStrategy>(1), 9999);
     auto ranges = relation.getRanges(SplitStrategy::SEQUENTIAL, 9999);
@@ -139,8 +132,6 @@ int main(int argc, char **argv)
 //    if (!std::filesystem::create_directory(FLAGS_btr)) {
 //        throw Generic_Exception("Unable to create btr output directory");
 //    }
-
-    spdlog::info("created datablockV2 for " + FLAGS_btr);
 
     // These counter are for statistics that match the harbook.
     std::vector<std::atomic_size_t> sizes_uncompressed(relation.columns.size());
@@ -155,8 +146,6 @@ int main(int argc, char **argv)
     //      - for every column: name, type
     // TODO chunk flag
 
-    spdlog::info("run datablockV2 for " + FLAGS_btr);
-
     auto start_time = std::chrono::steady_clock::now();
     tbb::parallel_for(SIZE(0), relation.columns.size(), [&](SIZE column_i) {
         types[column_i] = relation.columns[column_i].type;
@@ -169,8 +158,6 @@ int main(int argc, char **argv)
 
         std::vector<InputChunk> input_chunks;
         std::string path_prefix = FLAGS_btr + "/" + "column" + std::to_string(column_i) + "_part";
-        spdlog::info("compress for " + path_prefix + " " + relation.columns[column_i].name);
-
         ColumnPart part;
         for (SIZE chunk_i = 0; chunk_i < ranges.size(); chunk_i++) {
             if (FLAGS_chunk != -1 && FLAGS_chunk != chunk_i) {
@@ -192,11 +179,7 @@ int main(int argc, char **argv)
             part.addCompressedChunk(std::move(data));
         }
 
-        spdlog::info("compress for " + path_prefix + " " + relation.columns[column_i].name + " finished");
-
-
         if (!part.chunks.empty()) {
-            spdlog::info("part.chunks.empty()");
             std::string filename = path_prefix + std::to_string(part_counters[column_i]);
             sizes_compressed[column_i] += part.writeToDisk(filename);
             part_counters[column_i]++;
@@ -204,8 +187,6 @@ int main(int argc, char **argv)
             input_chunks.clear();
         }
     });
-
-    spdlog::info("finished datablockV2 for " + FLAGS_btr);
 
     Datablock::writeMetadata(FLAGS_btr + "/metadata", types, part_counters, ranges.size());
     std::ofstream stats_stream(FLAGS_stats);
