@@ -50,7 +50,7 @@ u32 Fsst::compress(const btrblocks::StringArrayViewer src,
 
   // Compress strings
   // TODO whyever this is fake(?), fix it.
-  const u64 output_buffer_size = 7 + 8 * stats.total_length;  // fake
+  const u64 output_buffer_size = 7 + 4 * stats.total_length;  // fake
   if (fsst_compress(encoder, stats.tuple_count,  (unsigned long*) input_string_lengths.get(),
                     input_string_buffers.get(), output_buffer_size, write_ptr,
                     (unsigned long*)  output_string_lengths.get(),
