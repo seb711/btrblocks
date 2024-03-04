@@ -202,7 +202,7 @@ int main(int argc, char **argv)
     auto end_time = std::chrono::steady_clock::now();
     uint64_t btr_creation_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
 
-    stats_stream << "Total," << total_uncompressed << "," << total_compressed << std::endl;
+    std::cout << "Total," << total_uncompressed << "," << total_compressed << std::endl;
 
     std::ofstream compressionout_stream(FLAGS_compressionout);
     double binary_creation_time_seconds = static_cast<double>(binary_creation_time) / 1e6;
