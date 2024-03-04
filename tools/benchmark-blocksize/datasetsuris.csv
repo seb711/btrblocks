@@ -9,7 +9,7 @@ Euro2016_1, s3://public-bi-benchmark/binary/Euro2016/1/Euro2016_1/, s3://public-
 Food_1, s3://public-bi-benchmark/binary/Food/1/Food_1/, s3://public-bi-benchmark/binary/Food/1/Food_1.yaml
 Generico_1, s3://public-bi-benchmark/binary/Generico/1/Generico_1/, s3://public-bi-benchmark/binary/Generico/1/Generico_1.yaml
 Hashtags_1, s3://public-bi-benchmark/binary/HashTags/1/HashTags_1/, s3://public-bi-benchmark/binary/HashTags/1/HashTags_1.yaml
-IGlocations_1, s3://public-bi-benchmark/binary/IGlocations1/1/IGlocations2_1/, s3://public-bi-benchmark/binary/IGlocations2/1/IGlocations2_1.yaml
+IGlocations_2, s3://public-bi-benchmark/binary/IGlocations2/1/IGlocations2_1/, s3://public-bi-benchmark/binary/IGlocations2/1/IGlocations2_1.yaml
 Medicare1_1, s3://public-bi-benchmark/binary/Medicare1/1/Medicare1_1/, s3://public-bi-benchmark/binary/Medicare1/1/Medicare1_1.yaml
 Medicare2_1, s3://public-bi-benchmark/binary/Medicare2/1/Medicare2_1/, s3://public-bi-benchmark/binary/Medicare2/1/Medicare2_1.yaml
 Medicare3_1, s3://public-bi-benchmark/binary/Medicare3/1/Medicare3_1/,  s3://public-bi-benchmark/binary/Medicare3/1/Medicare3_1.yaml
