@@ -1,2 +1,1 @@
-Physicians_1, s3://public-bi-eu-central-1/csv/Physicians/Physicians_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/Physicians/1/Physicians_1.yaml
-MulheresMil_1, s3://public-bi-eu-central-1/csv/MulheresMil/MulheresMil_1.csv, s3://public-bi-eu-central-1/v0.0.1/metadata/MulheresMil/1/MulheresMil_1.yaml
+IGlocations_2, s3://public-bi-benchmark/binary/IGlocations2/1/IGlocations2_1/, s3://public-bi-benchmark/binary/IGlocations2/1/IGlocations2_1.yaml
