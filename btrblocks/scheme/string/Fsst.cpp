@@ -128,9 +128,7 @@ bool Fsst::isUsable(StringStats& stats) {
 
 u32 Fsst::getTotalLength(const u8* src, u32 tuple_count, BitmapWrapper*) {
   auto& col_struct = *reinterpret_cast<const FsstStructure*>(src);
-  return col_struct.total_decompressed_size;
-
-  // return col_struct.total_decompressed_size - ((tuple_count + 1) * sizeof(StringArrayViewer::Slot));
+  return col_struct.total_decompressed_size - ((tuple_count + 1) * sizeof(StringArrayViewer::Slot));
 }
 // ------------------------------------------------------------------------------
 }  // namespace btrblocks::strings

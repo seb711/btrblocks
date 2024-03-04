@@ -606,8 +606,7 @@ bool DynamicDictionary::isUsable(StringStats& stats) {
 
 u32 DynamicDictionary::getTotalLength(const u8* src, u32 tuple_count, BitmapWrapper* nullmap) {
   const auto& col_struct = *reinterpret_cast<const DynamicDictionaryStructure*>(src);
-  return col_struct.total_decompressed_size;
-  // return col_struct.total_decompressed_size - ((tuple_count + 1) * sizeof(StringArrayViewer::Slot));
+  return col_struct.total_decompressed_size - ((tuple_count + 1) * sizeof(StringArrayViewer::Slot));
 }
 // -------------------------------------------------------------------------------------
 }  // namespace btrblocks::strings
