@@ -84,7 +84,6 @@ set(BTR_PRIVATE_INCLUDE_DIR)
 set(BTR_INCLUDE_DIR ${BTR_PUBLIC_INCLUDE_DIR} ${BTR_PRIVATE_INCLUDE_DIR})
 
 add_definitions( -DCHUNKSIZE=${CHUNKSIZE} )
-add_definitions( -DPARTSIZE=${PARTSIZE} )
 
 target_include_directories(btrblocks
     PUBLIC ${BTR_PUBLIC_INCLUDE_DIR}

@@ -58,7 +58,7 @@ fi
 for chunksize in {14..16}
 do
   echo "BUILDING FOR CHUNKSIZE $chunksize"
-  cmake ../../.. -DCHUNKSIZE=$chunksize -DPARTSIZE=16 -DCMAKE_BUILD_TYPE=Release
+  cmake ../../.. -DCHUNKSIZE=$chunksize -DCMAKE_BUILD_TYPE=Release
   make -j6 csvtobtr
   make -j6 decompression-speed
   # Sync URIs from the CSV file
