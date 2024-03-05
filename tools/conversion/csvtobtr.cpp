@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 
     // Prepare datastructures for btr compression
     //auto ranges = relation.getRanges(static_cast<SplitStrategy>(1), 9999);
-    auto ranges = relation.getRanges(SplitStrategy::SEQUENTIAL, 9999);
+    auto ranges = relation.getRanges(SplitStrategy::SEQUENTIAL, -1);
     assert(ranges.size() > 0);
     Datablock datablockV2(relation);
     std::filesystem::create_directory(FLAGS_btr);
