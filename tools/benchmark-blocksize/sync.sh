@@ -34,13 +34,8 @@ sync_uris() {
   done < "$input_file"
 }
 
-if ! command -v aws &> /dev/null; then
-  echo "AWS CLI not found. Please install it and configure."
-  exit 1
-fi
-
 # install things
-sudo apt-get install libssl-dev libcurl4-openssl-dev -y
+sudo apt-get install libssl-dev libcurl4-openssl-dev aws-cli -y
 
 # build the benchmark thing
 output_file="results.csv"

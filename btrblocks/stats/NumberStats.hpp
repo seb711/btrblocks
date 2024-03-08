@@ -33,8 +33,9 @@ struct NumberStats {
   // -------------------------------------------------------------------------------------
   tuple<vector<T>, vector<BITMAP>> samples(u32 n, u32 length) {
     // -------------------------------------------------------------------------------------
-    std::random_device rd;   // Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd());  // Standard mersenne_twister_engine seeded with
+    // std::random_device rd;   // Will be used to obtain a seed for the random number engine
+    std::mt19937 gen;  // Standard mersenne_twister_engine seeded with
+    gen.seed(42);
                              // rd()
     // -------------------------------------------------------------------------------------
     // TODO : Construction Site !! need a better theory and algorithm for

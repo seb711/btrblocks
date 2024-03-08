@@ -17,7 +17,7 @@ ExternalProject_Add(
         fsst_src
         PREFIX "vendor/cwida/fsst"
         GIT_REPOSITORY "https://github.com/seb711/fsst.git"
-        GIT_TAG memory-leak-fix
+        GIT_TAG buffer-overflow
         TIMEOUT 10
         UPDATE_COMMAND "" # to prevent rebuilding everytime
         INSTALL_COMMAND ""
