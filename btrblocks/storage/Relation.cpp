@@ -58,7 +58,8 @@ vector<tuple<u64, u64>> Relation::getRanges(btrblocks::SplitStrategy strategy,
   }
   // -------------------------------------------------------------------------------------
   if (strategy == SplitStrategy::RANDOM) {
-    std::shuffle(ranges.begin(), ranges.end(), std::mt19937(std::random_device()()));
+    std::mt19937 gen(42);  // Standard mersenne_twister_engine seeded with
+    std::shuffle(ranges.begin(), ranges.end(), gen);
     cout << std::get<0>(ranges[0]) << endl;
   }
   // -------------------------------------------------------------------------------------
