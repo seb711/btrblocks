@@ -19,15 +19,16 @@ sync_uris() {
 
     btr_dir="./csvtobtrdata/btrblocks/$name/"
     mkdir -p "$btr_dir" || rm -rf "$btr_dir"/*
-    bin_dir="./csvtobtrdata/btrblocks_bin/$name"
+    bin_dir="./csvtobtrdata/btrblocks_bin/$name/"
     echo "aws s3 sync $uri $bin_dir"
     if [[ ! -d $bin_dir ]]; then
       aws s3 sync $uri $bin_dir --no-sign
     fi
 
-    ./csvtobtr --btr $btr_dir --binary $bin_dir --create_btr true --yaml "./csvtobtrdata/yaml/$name/$schemaname"
+    yaml_file="./csvtobtrdata/yaml/$name/$schemaname"
+    ./csvtobtr --btr $btr_dir --binary $bin_dir --create_btr true --yaml $yaml_file
 
-    echo "$factor, $schemaname, $(./decompression-speed --btr $btr_dir --reps 5)" >> $output_file
+    echo "$factor, $schemaname, $(./decompression-speed --btr $btr_dir --reps 5 --binary $bin_dir --yaml $yaml_file --verify)" >> $output_file
 
     ((index++))
 
