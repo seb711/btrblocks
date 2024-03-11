@@ -44,7 +44,7 @@ rm $output_file
 mkdir tmpbuild
 cd tmpbuild
 
-dataset="../datasetsurismall.csv"
+dataset="../datasetsuris.csv"
 # Check if uris.csv exists
 if [[ ! -f $dataset ]]; then
   echo "datasetsurismall.csv file not found."
