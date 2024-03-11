@@ -28,7 +28,7 @@ sync_uris() {
     yaml_file="./csvtobtrdata/yaml/$name/$schemaname"
     ./csvtobtr --btr $btr_dir --binary $bin_dir --create_btr true --yaml $yaml_file
 
-    echo "$factor, $schemaname, $(./decompression-speed --btr $btr_dir --reps 5 --binary $bin_dir --yaml $yaml_file --verify)" >> $output_file
+    echo "$factor, $schemaname, $(./decompression-speed --btr $btr_dir --reps 100 --binary $bin_dir --yaml $yaml_file --verify)" >> $output_file
 
     ((index++))
 
