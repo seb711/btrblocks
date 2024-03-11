@@ -51,7 +51,7 @@ if [[ ! -f $dataset ]]; then
   exit 1
 fi
 
-for chunksize in {12..13}
+for chunksize in {15..16}
 do
   echo "BUILDING FOR CHUNKSIZE $chunksize"
   cmake ../../.. -DCHUNKSIZE=$chunksize -DCMAKE_BUILD_TYPE=Release
