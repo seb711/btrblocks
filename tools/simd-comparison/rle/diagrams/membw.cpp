@@ -1,7 +1,7 @@
+///usr/bin/env -S g++ "$0" -ltbb -O3 -o /tmp/membw.out && exec /tmp/membw.out "$@"
 #include <stdlib.h>    // malloc, free
 #include <string.h>    // memset, memcpy
 #include <stdint.h>    // integer types
-#include <emmintrin.h> // x86 SSE intrinsics
 #include <stdio.h>
 #include <assert.h>
 #include <sys/time.h>  // gettime
@@ -31,28 +31,29 @@ int main(int argc,char** argv) {
    oneapi::tbb::global_control global_limit(oneapi::tbb::global_control::max_allowed_parallelism, atoi(argv[2]));
    static affinity_partitioner ap;
 
-   {
-      double start = gettime();
-      tbb::parallel_for(tbb::blocked_range<uint64_t> (0, n), [&] (const tbb::blocked_range<uint64_t>& range) {
-                                                                for (uint64_t i=range.begin(); i!=range.end(); i++) {
-                                                                   keys[i] =i;
-                                                                }}, ap);
-      printf("%f\n",((sizeof(uint64_t)*n)/(1024*1024*1024))/(gettime()-start));
-   }
-
    while (true) {
-      std::atomic<uint64_t> s(0);
-      double start = gettime();
-      tbb::parallel_for(tbb::blocked_range<uint64_t> (0, n), [&] (const tbb::blocked_range<uint64_t>& range) {
-                                                                uint64_t sum = 0;
-                                                                for (uint64_t i=range.begin(); i!=range.end(); i++) {
-                                                                   sum += keys[i];
-                                                                }
-                                                                s += sum;
-                                                             }, ap);
-      printf("%f %ld\n",((sizeof(uint64_t)*n)/(1024ull*1024*1024))/(gettime()-start), s.load());
-   }
+	   for (int rep=0;rep!=3;++rep) {
+         double start = gettime();
+         tbb::parallel_for(tbb::blocked_range<uint64_t> (0, n), [&] (const tbb::blocked_range<uint64_t>& range) {
+                                                                  for (uint64_t i=range.begin(); i!=range.end(); i++) {
+                                                                     keys[i] =i;
+                                                                  }}, ap);
+         printf("%f\n",((sizeof(uint64_t)*n)/(1024*1024*1024))/(gettime()-start));
+      }
 
+      for (int rep=0;rep!=3;++rep) {
+         std::atomic<uint64_t> s(0);
+         double start = gettime();
+         tbb::parallel_for(tbb::blocked_range<uint64_t> (0, n), [&] (const tbb::blocked_range<uint64_t>& range) {
+                                                                  uint64_t sum = 0;
+                                                                  for (uint64_t i=range.begin(); i!=range.end(); i++) {
+                                                                     sum += keys[i];
+                                                                  }
+                                                                  s += sum;
+                                                               }, ap);
+         printf("%f %ld\n",(static_cast<double>(sizeof(uint64_t)*n)/(1024ull*1024*1024))/(gettime()-start), s.load());
+      }
+   }
 
    return 0;
 }

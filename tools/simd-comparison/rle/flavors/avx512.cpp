@@ -57,7 +57,11 @@ struct avx512_rle_decompression<INTEGER> {
       while (write_ptr < target_ptr) {
         if (write_ptr + 16 <= upper_limit) {
           // store is performed in a single cycle
+#if defined(NON_TEMPORAL)
+          _mm512_stream_si512(reinterpret_cast<__m512i*>(write_ptr), vec);
+#else
           _mm512_storeu_epi32(reinterpret_cast<__m512i*>(write_ptr), vec);
+#endif
           write_ptr += 16;
         } else {
           while (write_ptr != target_ptr) {

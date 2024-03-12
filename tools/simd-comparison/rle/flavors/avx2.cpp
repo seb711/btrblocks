@@ -49,6 +49,9 @@ struct avx2_rle_decompression<INTEGER> {
       // set is a sequential operation
       __m256i vec = _mm256_set1_epi32(values[run_i]);
 
+      // 1. measure same with aligned intrinsic in store
+      // 2. unrolling
+      // 3. naive see what compiler does
       // make the alignment correct
       while ((uintptr_t) write_ptr % 32 && write_ptr < target_ptr) {
         *(write_ptr++) = values[run_i];

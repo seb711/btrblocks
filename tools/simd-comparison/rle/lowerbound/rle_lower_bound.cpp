@@ -21,13 +21,11 @@ static double gettime(void) {
   return ((double)now_tv.tv_sec) + ((double)now_tv.tv_usec) / 1000000.0;
 }
 
-#ifdef USE_NON_TEMPORAL
 const size_t alignment = 32;
 void* malloc(size_t size) {
   size = ((size - 1) / alignment + 1) * alignment;
   return memalign(alignment, size);
 }
-#endif
 
 int main(int argc, char** argv) {
   if (argc < 2) {
@@ -39,10 +37,13 @@ int main(int argc, char** argv) {
   uint32_t iterations = atof(argv[3]);
   uint32_t repeats = atof(argv[4]);
   double factor = atof(argv[5]);
+  std::string flavor = argv[6];
 
   size_t compr_size = n / rle;
 
   PerfEvent e;
+  e.printHeader = (flavor == "autovec"); 
+  e.setParam("flavor", flavor);
   e.setParam("factor", factor);
   e.setParam("rle", rle);
   e.setParam("compr_size", compr_size);
@@ -90,10 +91,25 @@ int main(int argc, char** argv) {
 
           while (write_ptr < target_ptr) {
             // store is performed in a single cycle
-            assert(((uintptr_t)write_ptr % 32) == 0);
             _mm256_stream_si256(reinterpret_cast<__m256i*>(write_ptr), vec);
             write_ptr += 8;
           }
+
+          write_ptr = target_ptr;
+#elif defined(__AVX2__)  && defined(USE_AVX2)
+          uint32_t* target_ptr = write_ptr + rle;
+          __m256i vec = _mm256_set1_epi32(result);
+          while ((uintptr_t)write_ptr % 32 && write_ptr < target_ptr) {
+            *(write_ptr++) = result;
+          }
+
+          while (write_ptr < target_ptr) {
+            // store is performed in a single cycle
+            _mm256_store_si256(reinterpret_cast<__m256i*>(write_ptr), vec);
+            write_ptr += 8;
+          }
+
+          write_ptr = target_ptr;
 #else
           for (uint64_t y = 0; y != rle; y++) {
             target[pos++] = result;
